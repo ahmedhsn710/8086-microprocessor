@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Virtual x86</title>
+  <link rel="icon" href="logo.jpg">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+
+  <header class="text-grey-900 body-font">
+    <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+      <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+        <img src="logo.jpg" alt="" style="width: 35px; height: auto; border-radius: 50%; background-color: blue;">
+        <span class="ml-3 text-xl">Virtual x86</span>
+      </a>
+
+      <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
+        <!--
+            <a class="mr-5 hover:text-gray-900">First Link</a>
+            <a class="mr-5 hover:text-gray-900">Second Link</a>
+            <a class="mr-5 hover:text-gray-900">Third Link</a>
+            <a class="mr-5 hover:text-gray-900">Fourth Link</a>
+            -->
+      </nav>
+
+      <button
+        class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover: bg-gray-900 text-gray-300 rounded text-base mt-4 md:mt-0"
+        style="position: relative; float: right;"><a href=".">Reload</a>
+        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          class="w-4 h-4 ml-1" viewBox="0 0 24 24">
+          <path d="M5 12h14M12 5l7 7-7 7"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+
+  <section class="text-gray-400 bg-gray-900 body-font overflow-hidden">
+    <div class="container px-5 py-24 mx-auto">
+      <div class="lg:w-4/5 mx-auto flex flex-wrap">
+        <div class="editor-container ">
+          <div id="editor">// Assembly x86 Code</div>
+          <button id="run-button"
+            class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
+            Run
+          </button>
+        </div>
+        <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
+        </nav>
+
+        <div class="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
+
+          <h1 class="text-white text-3xl title-font font-medium mb-4">Registers</h1>
+          <div style="display: flex; margin:10px;">
+            <h2 class="text-sm title-font text-gray-500 tracking-widest">EAX</h2>
+            <table style="margin:10px;">
+              <tr>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+              </tr>
+            </table>
+            <table style="margin:10px;">
+              <tr>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+              </tr>
+            </table>
+          </div>
+
+          <div style="display: flex; margin:10px;">
+            <h2 class="text-sm title-font text-gray-500 tracking-widest">EBX</h2>
+
+            <table style="margin:10px;">
+              <tr>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+              </tr>
+            </table>
+            <table style="margin:10px;">
+              <tr>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+              </tr>
+            </table>
+          </div>
+
+          <div style="display: flex; margin:10px;">
+            <h2 class="text-sm title-font text-gray-500 tracking-widest">ECX</h2>
+
+            <table style="margin:10px;">
+              <tr>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+              </tr>
+            </table>
+            <table style="margin:10px;">
+              <tr>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+              </tr>
+            </table>
+          </div>
+
+          <div style="display: flex; margin:10px;">
+            <h2 class="text-sm title-font text-gray-500 tracking-widest">EDX</h2>
+
+            <table style="margin:10px;">
+              <tr>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+              </tr>
+            </table>
+            <table style="margin:10px;">
+              <tr>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+                <td style="background-color: white; border: 2px solid #061731; color: #061731;">1</td>
+              </tr>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <footer class="text-gray-600 body-font">
+    <div class="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
+      <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+        <img src="logo.jpg" alt="" style="width: 35px; height: auto; border-radius: 50%; background-color: blue;">
+        <span class="ml-3 text-xl">Virtual x86</span>
+      </a>
+      <p class="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4">© 2022
+        Virtual x86—
+        <a href="https://twitter.com" class="text-gray-600 ml-1" rel="noopener noreferrer" target="_blank">@virtuals</a>
+      </p>
+      <span class="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
+        <a class="text-gray-500">
+          <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5"
+            viewBox="0 0 24 24">
+            <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+          </svg>
+        </a>
+        <a class="ml-3 text-gray-500">
+          <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5"
+            viewBox="0 0 24 24">
+            <path
+              d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z">
+            </path>
+          </svg>
+        </a>
+        <a class="ml-3 text-gray-500">
+          <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            class="w-5 h-5" viewBox="0 0 24 24">
+            <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"></path>
+          </svg>
+        </a>
+        <a class="ml-3 text-gray-500">
+          <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="0"
+            class="w-5 h-5" viewBox="0 0 24 24">
+            <path stroke="none"
+              d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"></path>
+            <circle cx="4" cy="4" r="2" stroke="none"></circle>
+          </svg>
+        </a>
+      </span>
+    </div>
+  </footer>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.13.1/ace.js"></script>
+
+  <script src="code.js"></script>
+</body>
+
+</html>
