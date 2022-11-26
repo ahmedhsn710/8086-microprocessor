@@ -50,12 +50,11 @@ run.addEventListener('click', () => {
     let code = allcode.split("\n");
     console.log(code);
 
-    for(let i = 0; i < allcode.length; i++)
-		{
-			AsmToMch(code[i]);
-      console.log(code[i]);
-		}
-	  
+    for(let i = 0; i < code.length; i++)
+	{
+		AsmToMch(code[i]);
+		console.log(code[i]);
+	}	  
 })
 
 let regs = ["ax","bx","cx","dx","cs","ds","ss","ip"];
@@ -72,7 +71,7 @@ function isregister(val)
   return false;
 }
 
-let digits = ["1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"];
+let digits = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"];
 
 function isnumber(val)
 {
@@ -80,12 +79,12 @@ function isnumber(val)
   for(let i=0; i<val.length; i++)
   {
     for(let j=0; j<digits.length; j++)
-  {
-    if(val[i] === digits[j])
-    {
-      count++;
-    }
-  }
+	{
+		if(val[i] === digits[j])
+		{
+			count++;
+		}
+	}
   }
 
   if(count === val.length)
@@ -99,42 +98,31 @@ function AsmToMch(code)
 {
 	const words = code.split(" ");
 	const instruction = words[0]
-  if( instruction[0,2] === "//")
+	if( instruction[0,2] === "//")
 	{
-
+		console.log("OHH YEAAAA! comment");
 	}
-	if( instruction === "mov")
+	if( instruction === "mov" )
 	{
 		const firstop = words[1].substring(0, words[1].length - 1);
 		const secondop = words[2];
+		console.log("OHH YEAAAA! mov");
 
     if(isregister(firstop.toLowerCase()) && isregister(secondop.toLowerCase()))
     {
-      let reg1 = new Register(firstop.toUpperCase());
-      let reg2 = new Register(secondop.toUpperCase());
-      console.log(reg2.getReg());
-      reg1.setReg(reverseString(reg2.getReg().padStart(16, "0")));
+		console.log("OHH YEAAAA! direct");
+		let reg1 = new Register(firstop.toUpperCase());
+		let reg2 = new Register(secondop.toUpperCase());
+		console.log(reg2.getReg());
+		reg1.setReg(reverseString(reg2.getReg().padStart(16, "0")));
     }
 		
     if(isregister(firstop.toLowerCase()) && isnumber(secondop.toLowerCase()))
     {
-      let reg = new Register(firstop.toUpperCase());
-      reg.setReg(parseInt(secondop));
-    }
-		
-    if(isregister(firstop.toLowerCase()) && isnumber(secondop.toLowerCase()))
-    {
-      let reg = new Register(firstop.toUpperCase());
-      reg.setReg(parseInt(secondop));
-    }
-		
-    
-    if(isregister(firstop.toLowerCase()) && isnumber(secondop.toLowerCase()))
-    {
-      let reg = new Register(firstop.toUpperCase());
-      reg.setReg(parseInt(secondop));
-    }
-		
+		console.log("OHH YEAAAA! immediate");
+		let reg = new Register(firstop.toUpperCase());
+		reg.setReg(parseInt(secondop));
+    }		
 		
 	}
 }
