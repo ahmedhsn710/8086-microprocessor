@@ -5,6 +5,7 @@ let a = ace.edit(editor, {
   theme: "ace/theme/cobalt",
   mode: "ace/mode/assembly_x86",
 });
+// testing commits.
 
 class Register {
 	constructor(reg_name) {
