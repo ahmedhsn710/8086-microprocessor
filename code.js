@@ -5,7 +5,7 @@ let a = ace.edit(editor, {
   theme: "ace/theme/cobalt",
   mode: "ace/mode/assembly_x86",
 });
-
+//test 2.
 class Register {
 	constructor(reg_name) {
 		this.reg_name = reg_name;
