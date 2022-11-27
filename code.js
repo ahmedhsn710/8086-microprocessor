@@ -6,6 +6,14 @@ let a = ace.edit(editor, {
   mode: "ace/mode/assembly_x86",
 });
 
+function reverseString(str) {
+  if (str === "") // This is the terminal case that will end the recursion
+    return "";
+  
+  else
+    return reverseString(str.substr(1)) + str.charAt(0);
+}
+
 class Register {
 	constructor(reg_name) {
 		this.reg_name = reg_name;
@@ -33,16 +41,9 @@ class Register {
 			const tagID = this.reg_name + "_" + i;
 			value += document.getElementById(tagID).innerText;
 		}
-    return value;
+    return reverseString(value);
   }
-}
 
-function reverseString(str) {
-  if (str === "") // This is the terminal case that will end the recursion
-    return "";
-  
-  else
-    return reverseString(str.substr(1)) + str.charAt(0);
 }
 
 run.addEventListener('click', () => {
@@ -96,6 +97,7 @@ function isnumber(val)
 
 function AsmToMch(code)
 {
+  console.log(code);
 	const words = code.split(" ");
 	const instruction = words[0]
 	if( instruction[0,2] === "//")
@@ -114,7 +116,7 @@ function AsmToMch(code)
 		let reg1 = new Register(firstop.toUpperCase());
 		let reg2 = new Register(secondop.toUpperCase());
 		console.log(reg2.getReg());
-		reg1.setReg(reverseString(reg2.getReg().padStart(16, "0")));
+		reg1.setReg(reg2.getReg().padStart(16, "0"));
     }
 		
     if(isregister(firstop.toLowerCase()) && isnumber(secondop.toLowerCase()))
@@ -123,6 +125,41 @@ function AsmToMch(code)
 		let reg = new Register(firstop.toUpperCase());
 		reg.setReg(parseInt(secondop));
     }		
+    if(isregister(firstop.toLowerCase()) && ismemory(secondop.toLowerCase()))
+    {
+      let reg1 = new Register(firstop.toUpperCase());
+      const memloc = secondop.substring(1,secondop.length-1);
+      if(isnumber(memloc))
+      {
+        console.log("OHH YEAAAA! REG DIRECT");
+        reg1.setReg(parseInt(memloc));
+      }
+      if(isregister(memloc))
+      {
+        console.log("OHH YEAAAA! REG INDIRECT");
+        let reg2 = new Register(memloc.toUpperCase());
+        let hexmem = parseInt(reg2.getReg().padStart(16, "0"),2).toString(16); //contains hex of reg2 data.
+        hexmem = "f" + hexmem;
+        //console.log(hexmem);
+        let mem = new Register (hexmem.toUpperCase());
+        reg1.setReg(mem.getReg().padStart(16,"0"));
+
+      }
+    }
 		
 	}
+}
+function ismemory(val) //checking input if its from memory;
+{
+  if(val.charAt(0) =="[" && val.charAt(val.length-1 == "]"))
+  {
+      return true;
+  }
+  
+  if(val.charAt(0) =="[" && val.charAt(val.length-1 !== "]"))
+  {
+    console.log("Error!");
+    return false;
+  }
+  return false;
 }
