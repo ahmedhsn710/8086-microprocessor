@@ -1,10 +1,15 @@
 let editor = document.querySelector("#editor");
 let run = document.querySelector("#run-button");
+let decode = document.querySelector("#decode-button");
+let lineNo = 0;
+let digits = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"];
+let regs = ["ax","bx","cx","dx","cs","ds","ss","ip"];
 
 let a = ace.edit(editor, {
   theme: "ace/theme/cobalt",
   mode: "ace/mode/assembly_x86",
 });
+
 
 // Generic R/M class
 class Register {
@@ -38,7 +43,7 @@ class Register {
 
 }
 
-// Button Click
+// Run Button Click
 run.addEventListener('click', () => {
     const allcode = a.getValue();
     let code = allcode.split("\n");
@@ -52,8 +57,18 @@ run.addEventListener('click', () => {
 })
 
 
+// Decode Button Click
+decode.addEventListener('click', () => {
+    const allcode = a.getValue();
+    let code = allcode.split("\n");
+    console.log(code);
+
+	AsmToMch(code[lineNo]);
+	console.log(code[lineNo]);	  
+	lineNo++;
+})
+
 // Utility Functions and Variables
-let regs = ["ax","bx","cx","dx","cs","ds","ss","ip"];
 
 function isregister(val)
 {
@@ -81,8 +96,6 @@ function ismemory(val) //checking input if its from memory;
   }
   return false;
 }
-
-let digits = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"];
 
 function isnumber(val)
 {
@@ -113,23 +126,57 @@ function reverseString(str) {
     return reverseString(str.substr(1)) + str.charAt(0);
 }
 
+function isbinary(str, i =0)
+{
+	if(i == str.length)
+	{
+		return true;
+	}
+	if(str[i] == 0 || str[i] == 1)
+	{
+		let ret = isbinary(str, ++i);
+		return ret;
+	}
+	return false;
+	
+	
+}
+
+function ishex(str, i =0)
+{
+	if(i == str.length)
+	{
+		return true;
+	}
+	if(str[i] == 0 || str[i] == 1)
+	{
+		let ret = isbinary(str, ++i);
+		return ret;
+	}
+	return false;
+	
+	
+}
 
 // Main Conversion Function
 function AsmToMch(code)
 {
-  console.log(code);
+    console.log(code);
 	const words = code.split(" ");
 	const instruction = words[0]
+
 	if( instruction[0,2] === "//")
 	{
 		console.log("OHH YEAAAA! comment");
 	}
-	if( instruction === "mov" )
+
+	if( instruction.toLowerCase() === "mov" )
 	{
 		const firstop = words[1].substring(0, words[1].length - 1);
 		const secondop = words[2];
 		console.log("OHH YEAAAA! mov");
 	
+		// Register to Register 
 		if(isregister(firstop.toLowerCase()) && isregister(secondop.toLowerCase()))
 		{
 			console.log("OHH YEAAAA! direct");
@@ -138,40 +185,78 @@ function AsmToMch(code)
 			console.log(reg2.getReg());
 			reg1.setReg(reg2.getReg().padStart(16, "0"));
 		}
-			
+		
+		// Immidate data to register
 		if(isregister(firstop.toLowerCase()) && isnumber(secondop.toLowerCase()))
 		{
 			console.log("OHH YEAAAA! immediate");
 			let reg = new Register(firstop.toUpperCase());
 			reg.setReg(parseInt(secondop));
-		}		
+		}
+		
+		// Immidate data to memory
+		if(ismemory(firstop.toLowerCase()) && isnumber(secondop.toLowerCase()))
+		{
+			const memloc = firstop.substring(1,firstop.length-1); //remove []
+
+			// Direct memory
+			if(isnumber(memloc))
+			{
+				console.log("OHH YEAAAA! MEM DIRECT");
+				let hexmem = parseInt(memloc,10).toString(16); // converts int num inside brackets to hex
+				hexmem = "f" + hexmem;
+				let mem = new Register (hexmem.toUpperCase());
+				mem.setReg(parseInt(secondop));
+			}
+
+			// memory in register 
+			if(isregister(memloc))
+			{
+				console.log("OHH YEAAAA! MEM INDIRECT");
+				let reg1 = new Register(memloc.toUpperCase());
+				let hexmem = parseInt(reg1.getReg().padStart(16, "0"),2).toString(16); //contains hex of reg1 data.
+				hexmem = "f" + hexmem;
+				let mem = new Register (hexmem.toUpperCase());
+				mem.setReg(parseInt(secondop));
+			}	
+		}
+		
+		// Memory to register
 		if(isregister(firstop.toLowerCase()) && ismemory(secondop.toLowerCase()))
 		{
 		let reg1 = new Register(firstop.toUpperCase());
 		const memloc = secondop.substring(1,secondop.length-1);
-		if(isnumber(memloc))
-		{
-			console.log("OHH YEAAAA! REG DIRECT");
-			let hexmem = parseInt(memloc,10).toString(16); // converts int num inside brackets to hex
-			hexmem = "f" + hexmem;
-			let mem = new Register (hexmem.toUpperCase());
-			reg1.setReg(mem.getReg().padStart(16,"0"));
+
+			// Direct memory
+			if(isnumber(memloc))
+			{
+				console.log("OHH YEAAAA! REG DIRECT");
+				let hexmem = parseInt(memloc,10).toString(16); // converts int num inside brackets to hex
+				hexmem = "f" + hexmem;
+				let mem = new Register (hexmem.toUpperCase());
+				reg1.setReg(mem.getReg().padStart(16,"0"));
+			}
+
+			// Memory location in register
+			if(isregister(memloc))
+			{
+				console.log("OHH YEAAAA! REG INDIRECT");
+				let reg2 = new Register(memloc.toUpperCase());
+				let hexmem = parseInt(reg2.getReg().padStart(16, "0"),2).toString(16); //contains hex of reg2 data.
+				hexmem = "f" + hexmem;
+				let mem = new Register (hexmem.toUpperCase());
+				reg1.setReg(mem.getReg().padStart(16,"0"));
+		
+			}
 		}
-		if(isregister(memloc))
-		{
-			console.log("OHH YEAAAA! REG INDIRECT");
-			let reg2 = new Register(memloc.toUpperCase());
-			let hexmem = parseInt(reg2.getReg().padStart(16, "0"),2).toString(16); //contains hex of reg2 data.
-			hexmem = "f" + hexmem;
-			let mem = new Register (hexmem.toUpperCase());
-			reg1.setReg(mem.getReg().padStart(16,"0"));
-	
-		}
-		}
+
+		// regiater to memory 
 		if(ismemory(firstop.toLowerCase()) && isregister(secondop.toLowerCase()))
 		{
 			let reg2 = new Register(secondop.toUpperCase());
 			const memloc = firstop.substring(1,firstop.length-1); //remove []
+			
+			// Direct memory 
 			if(isnumber(memloc))
 			{
 				console.log("OHH YEAAAA! REG DIRECT");
@@ -181,6 +266,8 @@ function AsmToMch(code)
 				let mem = new Register (hexmem.toUpperCase());
 				mem.setReg(reg2.getReg().padStart(16,"0"));
 			}
+
+			// memory in register 
 			if(isregister(memloc))
 			{
 				console.log("OHH YEAAAA! REG INDIRECT");
@@ -191,5 +278,145 @@ function AsmToMch(code)
 				mem.setReg(reg2.getReg().padStart(16,"0"));
 			}			
 		}
+	}
+
+	if( instruction.toLowerCase() === "inc")
+	{
+		const operand = words[1];
+		if(isregister(operand))
+		{
+			let reg = new Register(operand.toUpperCase());
+			let val = parseInt(reg.getReg(), 2);
+			val++;
+			reg.setReg(val);
+		}
+		if(ismemory(operand))
+		{
+			const memloc = operand.substring(1,operand.length-1); //remove []
+			
+			// Direct memory 
+			if(isnumber(memloc))
+			{
+				let hexmem = parseInt(memloc,10).toString(16); // converts int num inside brackets to hex
+				hexmem = "f" + hexmem;
+				console.log(hexmem);
+				let mem = new Register (hexmem.toUpperCase());
+				let val = parseInt(mem.getReg(), 2);
+				val++;
+				mem.setReg(val);
+			}
+
+			// memory in register 
+			if(isregister(memloc))
+			{
+				let reg1 = new Register(memloc.toUpperCase());
+				let hexmem = parseInt(reg1.getReg().padStart(16, "0"),2).toString(16); //contains hex of reg1 data.
+				hexmem = "f" + hexmem;
+				let mem = new Register (hexmem.toUpperCase());
+				let val = parseInt(mem.getReg(), 2);
+				val++;
+				mem.setReg(val);
+			}			
+		}
+	}
+
+	if( instruction.toLowerCase() === "dec")
+	{
+		const operand = words[1];
+		if(isregister(operand))
+		{
+			let reg = new Register(operand.toUpperCase());
+			let val = parseInt(reg.getReg(), 2);
+			val--;
+			reg.setReg(val);
+		}
+		if(ismemory(operand))
+		{
+			const memloc = operand.substring(1,operand.length-1); //remove []
+			
+			// Direct memory 
+			if(isnumber(memloc))
+			{
+				let hexmem = parseInt(memloc,10).toString(16); // converts int num inside brackets to hex
+				hexmem = "f" + hexmem;
+				console.log(hexmem);
+				let mem = new Register (hexmem.toUpperCase());
+				let val = parseInt(mem.getReg(), 2);
+				val--;
+				mem.setReg(val);
+			}
+
+			// memory in register 
+			if(isregister(memloc))
+			{
+				let reg1 = new Register(memloc.toUpperCase());
+				let hexmem = parseInt(reg1.getReg().padStart(16, "0"),2).toString(16); //contains hex of reg1 data.
+				hexmem = "f" + hexmem;
+				let mem = new Register (hexmem.toUpperCase());
+				let val = parseInt(mem.getReg(), 2);
+				val--;
+				mem.setReg(val);
+			}			
+		}
+	}
+
+	// incomplete
+	if( instruction.toLowerCase() === "neg")
+	{
+		const operand = words[1];
+		if(isregister(operand))
+		{
+			let reg = new Register(operand.toUpperCase());
+			let val = parseInt(reg.getReg(), 10);
+			console.log(val);
+			let str = "";
+			for(let i =0; i < val.length; i++)
+			{
+				if(val[i] === "0")
+				{
+					str += "1";
+				}
+				else
+				{
+					str += "0";
+				}
+			}
+			console.log(str);
+			val = parseInt(reverseString(str), 2)
+			val++;
+			reg.setReg(val);
+		}
+		if(ismemory(operand))
+		{
+			const memloc = operand.substring(1,operand.length-1); //remove []
+			
+			// Direct memory 
+			if(isnumber(memloc))
+			{
+				let hexmem = parseInt(memloc,10).toString(16); // converts int num inside brackets to hex
+				hexmem = "f" + hexmem;
+				console.log(hexmem);
+				let mem = new Register (hexmem.toUpperCase());
+				let val = parseInt(mem.getReg(), 2);
+				val--;
+				mem.setReg(val);
+			}
+
+			// memory in register 
+			if(isregister(memloc))
+			{
+				let reg1 = new Register(memloc.toUpperCase());
+				let hexmem = parseInt(reg1.getReg().padStart(16, "0"),2).toString(16); //contains hex of reg1 data.
+				hexmem = "f" + hexmem;
+				let mem = new Register (hexmem.toUpperCase());
+				let val = parseInt(mem.getReg(), 2);
+				val--;
+				mem.setReg(val);
+			}			
+		}
+	}
+
+	if( instruction.toLowerCase() === "not")
+	{
 	}
 }

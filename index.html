@@ -41,10 +41,6 @@
     </div>
   </header>
 
-
-
-
-
   <section class="text-gray-400 bg-gray-900 body-font overflow-hidden">
     <div class="container px-5 py-24 mx-auto">
       <div class="lg:w-4/5 mx-auto flex flex-wrap">
@@ -52,8 +48,13 @@
         <div class="editor-container ">
           <div id="editor">// Assembly x86 Code</div>
           <button id="run-button"
-            class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
+            class=" text-gray-900 bg-white border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
             Run
+          </button>
+
+          <button id="decode-button"
+            class=" text-gray-900 bg-white border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
+            Decode line
           </button>
 
         </div>
@@ -62,7 +63,7 @@
         </nav>
 
 
-        <div id="regs" class="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
+        <div id="regs" class="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0" style="margin-top: 50px;">
 
           <h1 class="text-white text-3xl title-font font-medium mb-4">Registers</h1>
           <div>
