@@ -42,636 +42,904 @@
   </header>
 
 
+
+
+
   <section class="text-gray-400 bg-gray-900 body-font overflow-hidden">
     <div class="container px-5 py-24 mx-auto">
       <div class="lg:w-4/5 mx-auto flex flex-wrap">
+
         <div class="editor-container ">
           <div id="editor">// Assembly x86 Code</div>
           <button id="run-button"
             class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
             Run
           </button>
-			
+
         </div>
-		  <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
-          </nav>
-		
-          <div class="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">		  
-            <h1 class="text-white text-3xl title-font font-medium mb-4">Instruction</h1>		  
-			<div style="display: flex; margin:10px;">
-				<table style="margin:10px;">
-					<tr>
-						<td id="CurrInst" , style="background-color: white; border: 2px solid #061731; color: #061731;">Nan</td>
-					</tr>
-				</table>
-			</div>
-			
-            <h1 class="text-white text-3xl title-font font-medium mb-4">Machine Code</h1>
-			<div style="display: flex; margin:10px;">
-				<table style="margin:10px;">
-					<tr>
-						<td id="MachCode" , style="background-color: white; border: 2px solid #061731; color: #061731;">0000000000000000</td>
-					</tr>
-				</table>
-            
-			</div>
-        </div>
-        
 
-        <div>
+        <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
+        </nav>
 
-          <div id="regs" class="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
 
-            <h1 class="text-white text-3xl title-font font-medium mb-4">Registers</h1>
-            <div>
-              <div style="display: flex; margin:10px;">
-                <h2 class="text-sm title-font text-gray-500 tracking-widest">AX</h2>
-                <table style="margin:10px;" , id="_AX">
-                  <tr>
-                    <td id="AX_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="AX_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="AX_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="AX_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="AX_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="AX_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="AX_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="AX_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="AX_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="AX_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="AX_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="AX_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="AX_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="AX_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="AX_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="AX_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                  </tr>
-                </table>
-  
-                <h2 class="text-sm title-font text-gray-500 tracking-widest">CS</h2>
-                <table style="margin:10px;" , id="_CS">
-                  <tr>
-                    <td id="CS_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CS_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CS_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CS_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CS_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CS_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CS_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CS_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CS_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CS_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CS_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CS_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CS_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CS_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CS_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CS_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                  </tr>
-                </table>
-              </div>
-  
-              <div style="display: flex; margin:10px;">
-                <h2 class="text-sm title-font text-gray-500 tracking-widest">BX</h2>
-  
-                <table style="margin:10px;" , id="_BX">
-                  <tr>
-                    <td id="BX_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="BX_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="BX_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="BX_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="BX_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="BX_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="BX_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="BX_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="BX_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="BX_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="BX_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="BX_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="BX_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="BX_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="BX_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="BX_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                  </tr>
-                </table>
-  
-                <h2 class="text-sm title-font text-gray-500 tracking-widest">DS</h2>
-  
-                <table style="margin:10px;" , id="_DS">
-                  <tr>
-                    <td id="DS_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DS_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DS_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DS_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DS_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DS_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DS_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DS_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DS_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DS_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DS_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DS_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DS_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DS_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DS_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DS_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                  </tr>
-                </table>
-              </div>
-  
-              <div style="display: flex; margin:10px;">
-                <h2 class="text-sm title-font text-gray-500 tracking-widest">CX</h2>
-  
-                <table style="margin:10px;" , id="_CX">
-                  <tr>
-                    <td id="CX_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CX_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CX_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CX_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CX_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CX_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CX_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CX_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CX_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CX_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CX_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CX_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CX_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CX_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CX_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="CX_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                  </tr>
-                </table>
-  
-                <h2 class="text-sm title-font text-gray-500 tracking-widest">SS</h2>
-  
-                <table style="margin:10px;" , id="_SS">
-                  <tr>
-                    <td id="SS_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="SS_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="SS_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="SS_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="SS_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="SS_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="SS_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="SS_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="SS_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="SS_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="SS_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="SS_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="SS_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="SS_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="SS_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="SS_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                  </tr>
-                </table>
-              </div>
-  
-              <div style="display: flex; margin:10px;">
-                <h2 class="text-sm title-font text-gray-500 tracking-widest">DX</h2>
-  
-                <table style="margin:10px;" , id="_DX">
-                  <tr>
-                    <td id="DX_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DX_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DX_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DX_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DX_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DX_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DX_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DX_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DX_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DX_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DX_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DX_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DX_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DX_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DX_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="DX_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                  </tr>
-                </table>
-  
-                <h2 class="text-sm title-font text-gray-500 tracking-widest">IP</h2>
-  
-                <table style="margin:10px;" , id="_IP">
-                  <tr>
-                    <td id="IP_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="IP_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="IP_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="IP_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="IP_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="IP_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="IP_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="IP_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="IP_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="IP_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="IP_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="IP_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="IP_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="IP_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="IP_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="IP_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                  </tr>
-                </table>
-              </div>
+        <div id="regs" class="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
+
+          <h1 class="text-white text-3xl title-font font-medium mb-4">Registers</h1>
+          <div>
+            <div style="display: flex; margin:10px;">
+              <h2 class="text-sm title-font text-gray-500 tracking-widest">AX</h2>
+              <table style="margin:10px;" , id="_AX">
+                <tr>
+                  <td id="AX_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="AX_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="AX_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="AX_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="AX_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="AX_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="AX_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="AX_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="AX_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="AX_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="AX_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="AX_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="AX_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="AX_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="AX_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="AX_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                </tr>
+              </table>
+
+              <h2 class="text-sm title-font text-gray-500 tracking-widest">CS</h2>
+              <table style="margin:10px;" , id="_CS">
+                <tr>
+                  <td id="CS_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CS_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CS_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CS_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CS_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CS_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CS_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CS_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CS_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CS_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CS_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CS_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CS_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CS_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CS_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CS_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                </tr>
+              </table>
             </div>
-  
-  
+
+            <div style="display: flex; margin:10px;">
+              <h2 class="text-sm title-font text-gray-500 tracking-widest">BX</h2>
+
+              <table style="margin:10px;" , id="_BX">
+                <tr>
+                  <td id="BX_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="BX_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="BX_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="BX_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="BX_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="BX_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="BX_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="BX_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="BX_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="BX_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="BX_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="BX_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="BX_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="BX_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="BX_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="BX_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                </tr>
+              </table>
+
+              <h2 class="text-sm title-font text-gray-500 tracking-widest">DS</h2>
+
+              <table style="margin:10px;" , id="_DS">
+                <tr>
+                  <td id="DS_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DS_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DS_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DS_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DS_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DS_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DS_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DS_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DS_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DS_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DS_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DS_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DS_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DS_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DS_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DS_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                </tr>
+              </table>
+            </div>
+
+            <div style="display: flex; margin:10px;">
+              <h2 class="text-sm title-font text-gray-500 tracking-widest">CX</h2>
+
+              <table style="margin:10px;" , id="_CX">
+                <tr>
+                  <td id="CX_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CX_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CX_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CX_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CX_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CX_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CX_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CX_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CX_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CX_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CX_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CX_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CX_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CX_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CX_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="CX_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                </tr>
+              </table>
+
+              <h2 class="text-sm title-font text-gray-500 tracking-widest">SS</h2>
+
+              <table style="margin:10px;" , id="_SS">
+                <tr>
+                  <td id="SS_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="SS_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="SS_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="SS_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="SS_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="SS_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="SS_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="SS_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="SS_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="SS_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="SS_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="SS_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="SS_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="SS_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="SS_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="SS_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                </tr>
+              </table>
+            </div>
+
+            <div style="display: flex; margin:10px;">
+              <h2 class="text-sm title-font text-gray-500 tracking-widest">DX</h2>
+
+              <table style="margin:10px;" , id="_DX">
+                <tr>
+                  <td id="DX_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DX_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DX_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DX_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DX_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DX_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DX_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DX_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DX_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DX_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DX_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DX_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DX_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DX_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DX_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="DX_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                </tr>
+              </table>
+
+              <h2 class="text-sm title-font text-gray-500 tracking-widest">IP</h2>
+
+              <table style="margin:10px;" , id="_IP">
+                <tr>
+                  <td id="IP_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="IP_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="IP_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="IP_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="IP_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="IP_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="IP_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="IP_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="IP_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="IP_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="IP_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="IP_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="IP_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="IP_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="IP_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                  <td id="IP_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                </tr>
+              </table>
+            </div>
           </div>
 
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="text-gray-400 bg-gray-900 body-font overflow-hidden">
+    <div class="container px-5 py-24 mx-auto">
+      <div class="lg:w-4/5 mx-auto flex flex-wrap">
+          <div class="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
+            <h1 class="text-white text-3xl title-font font-medium mb-4">Instruction</h1>
+            <div style="display: flex; margin:10px;">
+              <table style="margin:10px;">
+                <tr>
+                  <td id="CurrInst" , style="background-color: white; border: 2px solid #061731; color: #061731;">Nan
+                  </td>
+                </tr>
+              </table>
+            </div>
+
+
+
+            <h1 class="text-white text-3xl title-font font-medium mb-4">Machine Code</h1>
+            <div style="display: flex; margin:10px;">
+              <table style="margin:10px;">
+                <tr>
+                  <td id="MachCode" , style="background-color: white; border: 2px solid #061731; color: #061731;">
+                    0000000000000000</td>
+                </tr>
+              </table>
+
+
+            </div>
+          </div>
+
+
+          <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
+          </nav>
           
           <div id="mems" class="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
-  
+
             <h1 class="text-white text-3xl title-font font-medium mb-4">Memory Locations</h1>
             <div>
               <div style="display: flex; margin:10px;">
                 <h2 class="text-sm title-font text-gray-500 tracking-widest">FFFF0</h2>
                 <table style="margin:10px;" , id="_FFFF0">
                   <tr>
-                    <td id="FFFF0_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF0_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF0_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF0_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF0_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF0_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF0_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF0_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF0_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF0_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF0_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF0_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF0_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF0_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF0_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF0_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                    <td id="FFFF0_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF0_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF0_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF0_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF0_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF0_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF0_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF0_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF0_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF0_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF0_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF0_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF0_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF0_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF0_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF0_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
                   </tr>
                 </table>
-  
+
                 <h2 class="text-sm title-font text-gray-500 tracking-widest">FFFF1</h2>
                 <table style="margin:10px;" , id="_FFFF1">
                   <tr>
-                    <td id="FFFF1_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF1_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF1_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF1_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF1_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF1_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF1_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF1_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF1_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF1_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF1_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF1_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF1_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF1_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF1_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF1_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                    <td id="FFFF1_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF1_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF1_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF1_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF1_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF1_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF1_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF1_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF1_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF1_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF1_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF1_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF1_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF1_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF1_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF1_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
                   </tr>
                 </table>
               </div>
-  
+
               <div style="display: flex; margin:10px;">
                 <h2 class="text-sm title-font text-gray-500 tracking-widest">FFFF2</h2>
-  
+
                 <table style="margin:10px;" , id="_FFFF2">
                   <tr>
-                    <td id="FFFF2_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF2_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF2_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF2_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF2_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF2_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF2_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF2_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF2_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF2_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF2_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF2_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF2_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF2_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF2_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF2_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                    <td id="FFFF2_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF2_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF2_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF2_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF2_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF2_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF2_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF2_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF2_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF2_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF2_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF2_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF2_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF2_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF2_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF2_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
                   </tr>
                 </table>
-  
+
                 <h2 class="text-sm title-font text-gray-500 tracking-widest">FFFF3</h2>
-  
+
                 <table style="margin:10px;" , id="_FFFF3">
                   <tr>
-                    <td id="FFFF3_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF3_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF3_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF3_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF3_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF3_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF3_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF3_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF3_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF3_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF3_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF3_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF3_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF3_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF3_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF3_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                    <td id="FFFF3_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF3_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF3_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF3_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF3_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF3_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF3_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF3_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF3_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF3_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF3_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF3_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF3_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF3_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF3_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF3_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
                   </tr>
                 </table>
               </div>
-  
+
               <div style="display: flex; margin:10px;">
                 <h2 class="text-sm title-font text-gray-500 tracking-widest">FFFF4</h2>
-  
+
                 <table style="margin:10px;" , id="_FFFF4">
                   <tr>
-                    <td id="FFFF4_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF4_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF4_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF4_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF4_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF4_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF4_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF4_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF4_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF4_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF4_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF4_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF4_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF4_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF4_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF4_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                    <td id="FFFF4_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF4_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF4_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF4_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF4_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF4_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF4_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF4_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF4_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF4_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF4_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF4_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF4_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF4_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF4_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF4_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
                   </tr>
                 </table>
-  
+
                 <h2 class="text-sm title-font text-gray-500 tracking-widest">FFFF5</h2>
-  
+
                 <table style="margin:10px;" , id="_FFFF5">
                   <tr>
-                    <td id="FFFF5_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF5_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF5_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF5_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF5_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF5_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF5_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF5_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF5_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF5_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF5_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF5_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF5_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF5_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF5_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF5_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                    <td id="FFFF5_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF5_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF5_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF5_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF5_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF5_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF5_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF5_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF5_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF5_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF5_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF5_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF5_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF5_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF5_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF5_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
                   </tr>
                 </table>
               </div>
-  
+
               <div style="display: flex; margin:10px;">
                 <h2 class="text-sm title-font text-gray-500 tracking-widest">FFFF6</h2>
-  
+
                 <table style="margin:10px;" , id="_FFFF6">
                   <tr>
-                    <td id="FFFF6_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF6_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF6_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF6_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF6_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF6_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF6_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF6_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF6_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF6_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF6_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF6_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF6_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF6_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF6_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF6_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                    <td id="FFFF6_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF6_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF6_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF6_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF6_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF6_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF6_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF6_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF6_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF6_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF6_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF6_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF6_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF6_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF6_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF6_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
                   </tr>
                 </table>
-  
+
                 <h2 class="text-sm title-font text-gray-500 tracking-widest">FFFF7</h2>
-  
+
                 <table style="margin:10px;" , id="_FFFF7">
                   <tr>
-                    <td id="FFFF7_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF7_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF7_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF7_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF7_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF7_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF7_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF7_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF7_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF7_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF7_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF7_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF7_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF7_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF7_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF7_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                    <td id="FFFF7_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF7_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF7_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF7_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF7_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF7_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF7_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF7_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF7_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF7_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF7_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF7_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF7_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF7_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF7_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF7_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
                   </tr>
                 </table>
               </div>
-  
+
               <div style="display: flex; margin:10px;">
                 <h2 class="text-sm title-font text-gray-500 tracking-widest">FFFF8</h2>
                 <table style="margin:10px;" , id="_FFFF8">
                   <tr>
-                    <td id="FFFF8_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF8_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF8_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF8_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF8_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF8_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF8_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF8_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF8_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF8_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF8_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF8_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF8_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF8_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF8_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF8_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                    <td id="FFFF8_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF8_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF8_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF8_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF8_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF8_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF8_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF8_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF8_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF8_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF8_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF8_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF8_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF8_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF8_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF8_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
                   </tr>
                 </table>
-  
+
                 <h2 class="text-sm title-font text-gray-500 tracking-widest">FFFF9</h2>
                 <table style="margin:10px;" , id="_FFFF9">
                   <tr>
-                    <td id="FFFF9_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF9_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF9_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF9_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF9_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF9_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF9_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF9_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF9_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF9_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF9_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF9_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF9_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF9_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF9_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFF9_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                    <td id="FFFF9_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF9_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF9_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF9_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF9_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF9_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF9_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF9_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF9_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF9_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF9_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF9_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF9_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF9_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF9_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFF9_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
                   </tr>
                 </table>
               </div>
-  
+
               <div style="display: flex; margin:10px;">
                 <h2 class="text-sm title-font text-gray-500 tracking-widest">FFFFA</h2>
-  
+
                 <table style="margin:10px;" , id="_FFFFA">
                   <tr>
-                    <td id="FFFFA_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFA_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFA_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFA_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFA_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFA_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFA_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFA_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFA_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFA_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFA_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFA_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFA_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFA_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFA_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFA_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                    <td id="FFFFA_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFA_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFA_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFA_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFA_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFA_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFA_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFA_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFA_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFA_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFA_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFA_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFA_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFA_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFA_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFA_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
                   </tr>
                 </table>
-  
+
                 <h2 class="text-sm title-font text-gray-500 tracking-widest">FFFFB</h2>
-  
+
                 <table style="margin:10px;" , id="_FFFFB">
                   <tr>
-                    <td id="FFFFB_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFB_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFB_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFB_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFB_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFB_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFB_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFB_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFB_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFB_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFB_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFB_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFB_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFB_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFB_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFB_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                    <td id="FFFFB_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFB_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFB_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFB_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFB_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFB_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFB_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFB_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFB_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFB_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFB_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFB_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFB_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFB_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFB_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFB_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
                   </tr>
                 </table>
               </div>
-  
+
               <div style="display: flex; margin:10px;">
                 <h2 class="text-sm title-font text-gray-500 tracking-widest">FFFFC</h2>
-  
+
                 <table style="margin:10px;" , id="_FFFFC">
                   <tr>
-                    <td id="FFFFC_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFC_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFC_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFC_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFC_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFC_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFC_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFC_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFC_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFC_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFC_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFC_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFC_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFC_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFC_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFC_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                    <td id="FFFFC_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFC_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFC_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFC_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFC_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFC_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFC_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFC_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFC_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFC_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFC_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFC_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFC_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFC_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFC_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFC_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
                   </tr>
                 </table>
-  
+
                 <h2 class="text-sm title-font text-gray-500 tracking-widest">FFFFD</h2>
-  
+
                 <table style="margin:10px;" , id="_FFFFD">
                   <tr>
-                    <td id="FFFFD_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFD_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFD_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFD_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFD_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFD_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFD_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFD_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFD_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFD_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFD_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFD_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFD_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFD_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFD_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFD_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                    <td id="FFFFD_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFD_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFD_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFD_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFD_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFD_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFD_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFD_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFD_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFD_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFD_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFD_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFD_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFD_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFD_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFD_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
                   </tr>
                 </table>
               </div>
-  
+
               <div style="display: flex; margin:10px;">
                 <h2 class="text-sm title-font text-gray-500 tracking-widest">FFFFE</h2>
-  
+
                 <table style="margin:10px;" , id="_FFFFE">
                   <tr>
-                    <td id="FFFFE_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFE_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFE_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFE_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFE_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFE_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFE_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFE_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFE_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFE_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFE_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFE_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFE_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFE_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFE_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFE_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                    <td id="FFFFE_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFE_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFE_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFE_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFE_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFE_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFE_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFE_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFE_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFE_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFE_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFE_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFE_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFE_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFE_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFE_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
                   </tr>
                 </table>
-  
+
                 <h2 class="text-sm title-font text-gray-500 tracking-widest">FFFFF</h2>
-  
+
                 <table style="margin:10px;" , id="_FFFFF">
                   <tr>
-                    <td id="FFFFF_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFF_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFF_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFF_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFF_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFF_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFF_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFF_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFF_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFF_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFF_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFF_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFF_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFF_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFF_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
-                    <td id="FFFFF_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0</td>
+                    <td id="FFFFF_15" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFF_14" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFF_13" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFF_12" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFF_11" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFF_10" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFF_9" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFF_8" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFF_7" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFF_6" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFF_5" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFF_4" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFF_3" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFF_2" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFF_1" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
+                    <td id="FFFFF_0" , style="background-color: white; border: 2px solid #061731; color: #061731;">0
+                    </td>
                   </tr>
                 </table>
               </div>
             </div>
-  
-  
+
+
           </div>
-  
-        </div>
-
-        
-
-      </div>
     </div>
   </section>
 
