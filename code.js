@@ -45,6 +45,7 @@ class Register {
 
 // Run Button Click
 run.addEventListener('click', () => {
+	lineNo = 0;
     const allcode = a.getValue();
     let code = allcode.split("\n");
     console.log(code);
@@ -61,11 +62,16 @@ run.addEventListener('click', () => {
 decode.addEventListener('click', () => {
     const allcode = a.getValue();
     let code = allcode.split("\n");
-    console.log(code);
+	let totallines = code.length;
+	if(lineNo <= totallines)
+	{
+		console.log(code);
 
-	AsmToMch(code[lineNo]);
-	console.log(code[lineNo]);	  
-	lineNo++;
+		AsmToMch(code[lineNo]);
+		console.log(code[lineNo]);	  
+		lineNo++;
+	}
+    
 })
 
 // Utility Functions and Variables
@@ -360,31 +366,16 @@ function AsmToMch(code)
 		}
 	}
 
-	// incomplete
 	if( instruction.toLowerCase() === "neg")
 	{
 		const operand = words[1];
 		if(isregister(operand))
 		{
 			let reg = new Register(operand.toUpperCase());
-			let val = parseInt(reg.getReg(), 10);
-			console.log(val);
-			let str = "";
-			for(let i =0; i < val.length; i++)
-			{
-				if(val[i] === "0")
-				{
-					str += "1";
-				}
-				else
-				{
-					str += "0";
-				}
-			}
-			console.log(str);
-			val = parseInt(reverseString(str), 2)
-			val++;
-			reg.setReg(val);
+			let val = parseInt(reg.getReg(), 2);
+			val = 65536 - val;
+			let str= val.toString(2);
+			reg.setReg(str);
 		}
 		if(ismemory(operand))
 		{
@@ -398,8 +389,9 @@ function AsmToMch(code)
 				console.log(hexmem);
 				let mem = new Register (hexmem.toUpperCase());
 				let val = parseInt(mem.getReg(), 2);
-				val--;
-				mem.setReg(val);
+				val = 65536 - val;
+				let str= val.toString(2);
+				mem.setReg(str);
 			}
 
 			// memory in register 
@@ -410,13 +402,53 @@ function AsmToMch(code)
 				hexmem = "f" + hexmem;
 				let mem = new Register (hexmem.toUpperCase());
 				let val = parseInt(mem.getReg(), 2);
-				val--;
-				mem.setReg(val);
+				val = 65536 - val;
+				let str= val.toString(2);
+				mem.setReg(str);
 			}			
 		}
 	}
 
 	if( instruction.toLowerCase() === "not")
 	{
+		const operand = words[1];
+		if(isregister(operand))
+		{
+			let reg = new Register(operand.toUpperCase());
+			let val = parseInt(reg.getReg(), 2);
+			val = 65535 - val;
+			let str= val.toString(2);
+			reg.setReg(str);
+		}
+		if(ismemory(operand))
+		{
+			const memloc = operand.substring(1,operand.length-1); //remove []
+			
+			// Direct memory 
+			if(isnumber(memloc))
+			{
+				let hexmem = parseInt(memloc,10).toString(16); // converts int num inside brackets to hex
+				hexmem = "f" + hexmem;
+				console.log(hexmem);
+				let mem = new Register (hexmem.toUpperCase());
+				let val = parseInt(mem.getReg(), 2);
+				val = 65535 - val;
+				let str= val.toString(2);
+				mem.setReg(str);
+			}
+
+			// memory in register 
+			if(isregister(memloc))
+			{
+				let reg1 = new Register(memloc.toUpperCase());
+				let hexmem = parseInt(reg1.getReg().padStart(16, "0"),2).toString(16); //contains hex of reg1 data.
+				hexmem = "f" + hexmem;
+				let mem = new Register (hexmem.toUpperCase());
+				let val = parseInt(mem.getReg(), 2);
+				val = 65535 - val;
+				let str= val.toString(2);
+				mem.setReg(str);
+			}			
+		}
 	}
 }
