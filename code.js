@@ -434,6 +434,7 @@ function AsmToMch(code)
 				machCode += "00"; //mod
 				machCode += "000"; //fixed
 				machCode += "110"; //r/m
+				machCode += getLittleEndian( parseInt(secondop).toString(2).padStart(16, "0") ); //data
 				console.log(machCode);
 				updateMachineCode(machCode);
 			}
@@ -498,6 +499,7 @@ function AsmToMch(code)
 				machCode += "00"; //mod
 				machCode += "001"; //fixed
 				machCode += "110"; //r/m
+				machCode += getLittleEndian( parseInt(secondop).toString(2).padStart(16, "0") ); //data
 				console.log(machCode);
 				updateMachineCode(machCode);
 			}
