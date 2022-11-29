@@ -262,8 +262,11 @@ function updateMachineCode(binstr) {
 }
 
 // Main Conversion Function
-function AsmToMch(code) {
-	console.log(code);
+
+function AsmToMch(code)
+{
+  console.log(code);
+
 	const words = code.split(" ");
 	const instruction = words[0].toLowerCase();
 
@@ -859,6 +862,93 @@ function AsmToMch(code) {
 		return;
 	}
 
+    if( instruction === "and")//instruction for bitwise and.
+    {
+      const firstop = words[1].substring(0, words[1].length - 1).toLowerCase();
+	  const secondop = words[2].toLowerCase();
+      if(isregister(firstop))// First operand is a register. This has three cases.
+      {
+        let reg1 = new Register(firstop.toUpperCase());
+		let val1 = parseInt(reg1.getReg(), 2);
+		let val2;
+			if(isnumber(secondop)) // case1. Second operand is immediete.
+			{
+				val2 = parseInt(secondop);
+			}
+      
+      		if(isregister(secondop))// case2. Second operand is also a register.
+			{
+				let reg2 = new Register(secondop.toUpperCase());
+				val2 = parseInt(reg2.getReg(), 2);
+			}
+			if(ismemory(secondop))// case3. Second operand is memory. This further has three cases.
+			{
+				const memloc = secondop.substring(1,secondop.length-1); //remove []
+				if(isregister(memloc))//case1. Memory is inside reg.
+				{
+					let reg = new Register(memloc.toUpperCase());
+					let hexmem = parseInt(reg.getReg().padStart(16, "0"),2).toString(16); //contains hex of reg1 data.
+					hexmem = "f" + hexmem;
+					let mem = new Register (hexmem.toUpperCase());
+					val2 = parseInt(mem.getReg(), 2);
+				}
+				if(isnumber(memloc))//case 2. Memory is given directly.
+				{
+					let hexmem = parseInt(memloc,10).toString(16); // converts int num inside brackets to hex
+					hexmem = "f" + hexmem;
+					console.log(hexmem);
+					let mem = new Register (hexmem.toUpperCase());
+					val2 = parseInt(mem.getReg(), 2);
+				}
+			}
+			console.log(val1, val2, val1&val2);
+			reg1.setReg(val1&val2);
+	  }
+      if(ismemory(firstop))//First operand is memory. This has two cases.
+      { 
+        const memloc = firstop.substring(1,firstop.length-1); //remove []
+		let val2;
+		let val1;
+		let mem;
+		if(isregister(memloc))//case1. memory is inside a register. This further has two cases.
+		{
+			let reg1 = new Register(memloc.toUpperCase());
+			let hexmem = parseInt(reg1.getReg().padStart(16, "0"),2).toString(16); //contains hex of reg1 data.
+			hexmem = "f" + hexmem;
+			mem = new Register (hexmem.toUpperCase());
+			val1 = parseInt(mem.getReg(), 2);
+			if(isregister(secondop))//case 1. Second operand is a register.
+			{
+				let reg2 = new Register(secondop.toUpperCase());
+				val2 = parseInt(reg2.getReg(), 2);
+			}
+			if(isnumber(secondop))//case2. Second operand is a number.
+			{
+				val2 = parseInt(secondop);
+			}
+		}
+		if(isnumber(memloc))//case2. Memory available directly. This further has two cases.
+		{
+			let hexmem = parseInt(memloc,10).toString(16); // converts int num inside brackets to hex
+			hexmem = "f" + hexmem;
+			console.log(hexmem);
+			mem = new Register (hexmem.toUpperCase());
+			val1 = parseInt(mem.getReg(), 10);
+			if(isregister(secondop))//case1. Second operand is a register.
+			{
+				let reg2 = new Register(secondop.toUpperCase());
+				val2 = parseInt(reg2.getReg(), 2);
+			}
+			if(isnumber(secondop))//case2. Second operand is a number.
+			{
+				val2 = parseInt(secondop);
+			}
+		}
+		mem.setReg(val1&val2);
+      }
+    }
+
+
 	
 	if (instruction == "jmp")
 	{
@@ -882,3 +972,4 @@ function AsmToMch(code) {
 		return;
 	}	
 }
+
