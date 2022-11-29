@@ -98,13 +98,13 @@ class Register {
 run.addEventListener('click', () => {
 	lineNo = 0;
 
-    const allcode = a.getValue();
-    code = allcode.split("\n");
-	for(let i = 0; i < code.length; i++) // Getting all labels
-	{		
+	const allcode = a.getValue();
+	code = allcode.split("\n");
+	for (let i = 0; i < code.length; i++) // Getting all labels
+	{
 		const words = code[i].split(" ");
 		const fword = words[0].toLowerCase();
-		if( fword[0,2] != "//" && fword[fword.length - 1] == ":" ) // is not comment and is label
+		if (fword[0, 2] != "//" && fword[fword.length - 1] == ":") // is not comment and is label
 		{
 			labels.push([fword.substr(0, fword.length - 1).toLowerCase(), i]);
 		}
@@ -117,15 +117,14 @@ run.addEventListener('click', () => {
 
 // Decode Button Click
 decode.addEventListener('click', () => {
-	if(lineNo <= code.length)
-	{
+	if (lineNo < code.length) {
 
 		AsmToMch(code[lineNo]);
 		console.log(code[lineNo]);
 		document.getElementById("CurrInst").innerText = code[lineNo];
 		lineNo++;
 
-	}   
+	}
 })
 
 
@@ -178,28 +177,22 @@ function ismemory(val) //checking input if its from memory;
 	return false;
 }
 
-function getLabelLine(name)
-{
-	for(let i = 0; i < labels.length; i++)
-	{
-		if(name === labels[i][0])
-		{
+function getLabelLine(name) {
+	for (let i = 0; i < labels.length; i++) {
+		if (name === labels[i][0]) {
 			return labels[i][1];
 		}
 	}
 	return -1;
 }
 
-function isnumber(val)
-{
-  let count =0;
-  for(let i=0; i<val.length; i++)
-  {
-    for(let j=0; j<digits.length; j++)
-	{
-		if(val[i] === digits[j])
-		{
-			count++;
+function isnumber(val) {
+	let count = 0;
+	for (let i = 0; i < val.length; i++) {
+		for (let j = 0; j < digits.length; j++) {
+			if (val[i] === digits[j]) {
+				count++;
+			}
 		}
 	}
 
@@ -263,9 +256,8 @@ function updateMachineCode(binstr) {
 
 // Main Conversion Function
 
-function AsmToMch(code)
-{
-  console.log(code);
+function AsmToMch(code) {
+	console.log(code);
 
 	const words = code.split(" ");
 	const instruction = words[0].toLowerCase();
@@ -348,7 +340,7 @@ function AsmToMch(code)
 			else {
 				reg.setReg(parseInt(secondop));
 			}
-      
+
 			machCode += "1100011"; //opcode
 			if (is8byteregister(firstop)) {
 				machCode += "0";
@@ -392,14 +384,14 @@ function AsmToMch(code)
 				let hexmem = parseInt(reg1.getReg().padStart(16, "0"), 2).toString(16); //contains hex of reg1 data.
 				hexmem = "f" + hexmem;
 				let mem = new Register(hexmem.toUpperCase());
-				mem.setReg(parseInt(secondop));			
+				mem.setReg(parseInt(secondop));
 				machCode += "1100011"; //opcode
 
 				machCode += "1"; //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
 				machCode += "00"; //mod
 				machCode += "000"; //fixed
 				machCode += "111"; //r/m <- NOT SURE ABOUT THIS
-			}	
+			}
 
 		}
 
@@ -442,11 +434,11 @@ function AsmToMch(code)
 				else {
 					machCode += "1";
 				}
-				 machCode += "00"; //mod
+				machCode += "00"; //mod
 
 				machCode += getRegCode(firstop); //reg
 				machCode += "110"; //r/m
-				machCode += getLittleEndian( parseInt(memloc).toString(2).padStart(16, "0") ); //address
+				machCode += getLittleEndian(parseInt(memloc).toString(2).padStart(16, "0")); //address
 			}
 
 			// Memory location in register (NEED TO CHECK MACHINE CODE FOR THIS)
@@ -475,14 +467,14 @@ function AsmToMch(code)
 					reg1.setReg(mem.getReg().padStart(16, "0"));
 				}
 
-			  machCode += "100010"; //opcode
+				machCode += "100010"; //opcode
 				machCode += "1"; //dir
 				if (is8byteregister(firstop)) {
 					machCode += "0";
 				}
 				else {
 					machCode += "1";
-				} 
+				}
 				machCode += "00"; //mod
 				machCode += getRegCode(firstop); //reg
 				machCode += "111"; //r/m <- NOT SURE ABOUT THIS
@@ -517,7 +509,7 @@ function AsmToMch(code)
 				else {
 					mem.setReg(reg2.getReg().padStart(16, "0"));
 				}
-				
+
 
 				machCode += "100010"; //opcode
 
@@ -531,7 +523,7 @@ function AsmToMch(code)
 				machCode += "00"; //mod
 				machCode += getRegCode(secondop); //reg
 				machCode += "110"; //r/m
-				machCode += getLittleEndian( parseInt(memloc).toString(2).padStart(16, "0") ); //address
+				machCode += getLittleEndian(parseInt(memloc).toString(2).padStart(16, "0")); //address
 			}
 
 			// memory in register (NEED TO CHECK MACHINE CODE FOR THIS)
@@ -571,9 +563,9 @@ function AsmToMch(code)
 				machCode += "00"; //mod
 				machCode += getRegCode(secondop); //reg
 				machCode += "111"; //r/m <- NOT SURE ABOUT THIS
-			}			
+			}
 		}
-		
+
 		console.log(machCode);
 		updateMachineCode(machCode);
 		return;
@@ -583,16 +575,15 @@ function AsmToMch(code)
 		const operand = words[1].toLowerCase();
 
 		let machCode = "";
-		
-		if(isregister(operand))
-		{
+
+		if (isregister(operand)) {
 
 			let reg = new Register(operand.toUpperCase());
 			let val = parseInt(reg.getReg(), 2);
 			val++;
 			reg.setReg(val);
 
-			
+
 			machCode += "1111111"; //opcode
 
 			machCode += "1"; //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
@@ -613,7 +604,7 @@ function AsmToMch(code)
 				val++;
 				mem.setReg(val);
 
-				
+
 				machCode += "1111111"; //opcode
 
 				machCode += "1"; //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
@@ -621,7 +612,7 @@ function AsmToMch(code)
 				machCode += "000"; //fixed
 				machCode += "110"; //r/m
 
-				machCode += getLittleEndian( parseInt(secondop).toString(2).padStart(16, "0") ); //address
+				machCode += getLittleEndian(parseInt(memloc).toString(2).padStart(16, "0")); //address
 
 			}
 
@@ -635,7 +626,7 @@ function AsmToMch(code)
 				val++;
 				mem.setReg(val);
 
-				
+
 				machCode += "1111111"; //opcode
 
 				machCode += "1"; //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
@@ -643,7 +634,7 @@ function AsmToMch(code)
 				machCode += "000"; //fixed
 				machCode += "111"; //r/m  <- NOT SURE ABOUT THIS
 
-			}			
+			}
 
 		}
 		console.log(machCode);
@@ -652,19 +643,17 @@ function AsmToMch(code)
 	}
 
 
-	if( instruction === "dec")
-	{
+	if (instruction === "dec") {
 		const operand = words[1].toLowerCase();
 		let machCode = "";
-		if(isregister(operand))
-		{
+		if (isregister(operand)) {
 
 			let reg = new Register(operand.toUpperCase());
 			let val = parseInt(reg.getReg(), 2);
 			val--;
 			reg.setReg(val);
 
-			
+
 			machCode += "1111111"; //opcode
 
 			machCode += "1"; //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
@@ -685,7 +674,7 @@ function AsmToMch(code)
 				val--;
 				mem.setReg(val);
 
-				
+
 				machCode += "1111111"; //opcode
 
 				machCode += "1"; //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
@@ -693,7 +682,7 @@ function AsmToMch(code)
 				machCode += "001"; //fixed
 				machCode += "110"; //r/m
 
-				machCode += getLittleEndian( parseInt(secondop).toString(2).padStart(16, "0") ); //address
+				machCode += getLittleEndian(parseInt(memloc).toString(2).padStart(16, "0")); //address
 
 			}
 
@@ -707,7 +696,7 @@ function AsmToMch(code)
 				val--;
 				mem.setReg(val);
 
-				
+
 				machCode += "1111111"; //opcode
 
 				machCode += "1"; //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
@@ -715,7 +704,7 @@ function AsmToMch(code)
 				machCode += "001"; //fixed
 				machCode += "111"; //r/m  <- NOT SURE ABOUT THIS
 
-			}			
+			}
 
 		}
 		console.log(machCode);
@@ -724,20 +713,18 @@ function AsmToMch(code)
 	}
 
 
-	if( instruction === "neg")
-	{
+	if (instruction === "neg") {
 		const operand = words[1];
 		let machCode = "";
-		
-		if(isregister(operand))
-		{
+
+		if (isregister(operand)) {
 
 			let reg = new Register(operand.toUpperCase());
 			let val = parseInt(reg.getReg(), 2);
 			val = 65536 - val;
 			let str = val.toString(2);
 			reg.setReg(str);
-			
+
 			machCode += "1111011"; //op-code
 			machCode += "1" //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
 			machCode += "11"; //mod
@@ -757,19 +744,18 @@ function AsmToMch(code)
 				val = 65536 - val;
 				let str = val.toString(2);
 				mem.setReg(str);
-				
+
 				machCode += "1111011"; //op-code
 				machCode += "1" //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
 				machCode += "00"; //mod
 				machCode += "011"; //fixed
 				machCode += "110"; //r/m
-				machCode += getLittleEndian( parseInt(memloc).toString(2).padStart(16, "0") ); //address
+				machCode += getLittleEndian(parseInt(memloc).toString(2).padStart(16, "0")); //address
 			}
 
 
 			// memory in register (NEED TO CHECK MACHINE CODE FOR THIS)
-			if(isregister(memloc))
-			{
+			if (isregister(memloc)) {
 
 				let reg1 = new Register(memloc.toUpperCase());
 				let hexmem = parseInt(reg1.getReg().padStart(16, "0"), 2).toString(16); //contains hex of reg1 data.
@@ -780,33 +766,31 @@ function AsmToMch(code)
 				let str = val.toString(2);
 				mem.setReg(str);
 
-				
+
 				machCode += "1111011"; //op-code
 				machCode += "1" //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
 				machCode += "00"; //mod
 				machCode += "011"; //fixed
 				machCode += "111"; //r/m  <- NOT SURE ABOUT THIS
-			}			
+			}
 		}
 		updateMachineCode(machCode);
 		return;
 	}
 
 
-	if( instruction === "not")
-	{
+	if (instruction === "not") {
 		const operand = words[1];
 		let machCode = "";
-		
-		if(isregister(operand))
-		{
+
+		if (isregister(operand)) {
 
 			let reg = new Register(operand.toUpperCase());
 			let val = parseInt(reg.getReg(), 2);
 			val = 65535 - val;
 			let str = val.toString(2);
 			reg.setReg(str);
-			
+
 			machCode += "1111011"; //op-code
 			machCode += "1" //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
 			machCode += "11"; //mod
@@ -826,19 +810,18 @@ function AsmToMch(code)
 				val = 65535 - val;
 				let str = val.toString(2);
 				mem.setReg(str);
-				
+
 				machCode += "1111011"; //op-code
 				machCode += "1" //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
 				machCode += "00"; //mod
 				machCode += "010"; //fixed
 				machCode += "110"; //r/m
-				machCode += getLittleEndian( parseInt(memloc).toString(2).padStart(16, "0") ); //address
+				machCode += getLittleEndian(parseInt(memloc).toString(2).padStart(16, "0")); //address
 			}
 
 
 			// memory in register (NEED TO CHECK MACHINE CODE FOR THIS)
-			if(isregister(memloc))
-			{
+			if (isregister(memloc)) {
 
 				let reg1 = new Register(memloc.toUpperCase());
 				let hexmem = parseInt(reg1.getReg().padStart(16, "0"), 2).toString(16); //contains hex of reg1 data.
@@ -849,127 +832,126 @@ function AsmToMch(code)
 				let str = val.toString(2);
 				mem.setReg(str);
 
-				
+
 				machCode += "1111011"; //op-code
 				machCode += "1" //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
 				machCode += "00"; //mod
 				machCode += "010"; //fixed
 				machCode += "111"; //r/m  <- NOT SURE ABOUT THIS
-			}			
+			}
 
 		}
 		updateMachineCode(machCode);
 		return;
 	}
 
-    if( instruction === "and")//instruction for bitwise and.
-    {
-      const firstop = words[1].substring(0, words[1].length - 1).toLowerCase();
-	  const secondop = words[2].toLowerCase();
-      if(isregister(firstop))// First operand is a register. This has three cases.
-      {
-        let reg1 = new Register(firstop.toUpperCase());
-		let val1 = parseInt(reg1.getReg(), 2);
-		let val2;
-			if(isnumber(secondop)) // case1. Second operand is immediete.
+	if (instruction === "and")//instruction for bitwise and.
+	{
+		const firstop = words[1].substring(0, words[1].length - 1).toLowerCase();
+		const secondop = words[2].toLowerCase();
+		if (isregister(firstop))// First operand is a register. This has three cases.
+		{
+			let reg1 = new Register(firstop.toUpperCase());
+			let val1 = parseInt(reg1.getReg(), 2);
+			let val2;
+			if (isnumber(secondop)) // case1. Second operand is immediete.
 			{
 				val2 = parseInt(secondop);
 			}
-      
-      		if(isregister(secondop))// case2. Second operand is also a register.
+
+			if (isregister(secondop))// case2. Second operand is also a register.
 			{
 				let reg2 = new Register(secondop.toUpperCase());
 				val2 = parseInt(reg2.getReg(), 2);
 			}
-			if(ismemory(secondop))// case3. Second operand is memory. This further has three cases.
+			if (ismemory(secondop))// case3. Second operand is memory. This further has three cases.
 			{
-				const memloc = secondop.substring(1,secondop.length-1); //remove []
-				if(isregister(memloc))//case1. Memory is inside reg.
+				const memloc = secondop.substring(1, secondop.length - 1); //remove []
+				if (isregister(memloc))//case1. Memory is inside reg.
 				{
 					let reg = new Register(memloc.toUpperCase());
-					let hexmem = parseInt(reg.getReg().padStart(16, "0"),2).toString(16); //contains hex of reg1 data.
+					let hexmem = parseInt(reg.getReg().padStart(16, "0"), 2).toString(16); //contains hex of reg1 data.
 					hexmem = "f" + hexmem;
-					let mem = new Register (hexmem.toUpperCase());
+					let mem = new Register(hexmem.toUpperCase());
 					val2 = parseInt(mem.getReg(), 2);
 				}
-				if(isnumber(memloc))//case 2. Memory is given directly.
+				if (isnumber(memloc))//case 2. Memory is given directly.
 				{
-					let hexmem = parseInt(memloc,10).toString(16); // converts int num inside brackets to hex
+					let hexmem = parseInt(memloc, 10).toString(16); // converts int num inside brackets to hex
 					hexmem = "f" + hexmem;
 					console.log(hexmem);
-					let mem = new Register (hexmem.toUpperCase());
+					let mem = new Register(hexmem.toUpperCase());
 					val2 = parseInt(mem.getReg(), 2);
 				}
 			}
-			console.log(val1, val2, val1&val2);
-			reg1.setReg(val1&val2);
-	  }
-      if(ismemory(firstop))//First operand is memory. This has two cases.
-      { 
-        const memloc = firstop.substring(1,firstop.length-1); //remove []
-		let val2;
-		let val1;
-		let mem;
-		if(isregister(memloc))//case1. memory is inside a register. This further has two cases.
-		{
-			let reg1 = new Register(memloc.toUpperCase());
-			let hexmem = parseInt(reg1.getReg().padStart(16, "0"),2).toString(16); //contains hex of reg1 data.
-			hexmem = "f" + hexmem;
-			mem = new Register (hexmem.toUpperCase());
-			val1 = parseInt(mem.getReg(), 2);
-			if(isregister(secondop))//case 1. Second operand is a register.
-			{
-				let reg2 = new Register(secondop.toUpperCase());
-				val2 = parseInt(reg2.getReg(), 2);
-			}
-			if(isnumber(secondop))//case2. Second operand is a number.
-			{
-				val2 = parseInt(secondop);
-			}
+			console.log(val1, val2, val1 & val2);
+			reg1.setReg(val1 & val2);
 		}
-		if(isnumber(memloc))//case2. Memory available directly. This further has two cases.
+		if (ismemory(firstop))//First operand is memory. This has two cases.
 		{
-			let hexmem = parseInt(memloc,10).toString(16); // converts int num inside brackets to hex
-			hexmem = "f" + hexmem;
-			console.log(hexmem);
-			mem = new Register (hexmem.toUpperCase());
-			val1 = parseInt(mem.getReg(), 10);
-			if(isregister(secondop))//case1. Second operand is a register.
+			const memloc = firstop.substring(1, firstop.length - 1); //remove []
+			let val2;
+			let val1;
+			let mem;
+			if (isregister(memloc))//case1. memory is inside a register. This further has two cases.
 			{
-				let reg2 = new Register(secondop.toUpperCase());
-				val2 = parseInt(reg2.getReg(), 2);
+				let reg1 = new Register(memloc.toUpperCase());
+				let hexmem = parseInt(reg1.getReg().padStart(16, "0"), 2).toString(16); //contains hex of reg1 data.
+				hexmem = "f" + hexmem;
+				mem = new Register(hexmem.toUpperCase());
+				val1 = parseInt(mem.getReg(), 2);
+				if (isregister(secondop))//case 1. Second operand is a register.
+				{
+					let reg2 = new Register(secondop.toUpperCase());
+					val2 = parseInt(reg2.getReg(), 2);
+				}
+				if (isnumber(secondop))//case2. Second operand is a number.
+				{
+					val2 = parseInt(secondop);
+				}
 			}
-			if(isnumber(secondop))//case2. Second operand is a number.
+			if (isnumber(memloc))//case2. Memory available directly. This further has two cases.
 			{
-				val2 = parseInt(secondop);
+				console.log(memloc);
+				let hexmem = parseInt(memloc).toString(16); // converts int num inside brackets to hex
+				hexmem = "f" + hexmem;
+				console.log(hexmem);
+				mem = new Register(hexmem.toUpperCase());
+				console.log(memloc);
+				val1 = parseInt(mem.getReg(), 2);
+				if (isregister(secondop))//case1. Second operand is a register.
+				{
+					let reg2 = new Register(secondop.toUpperCase());
+					val2 = parseInt(reg2.getReg(), 2);
+				}
+				if (isnumber(secondop))//case2. Second operand is a number.
+				{
+					val2 = parseInt(secondop);
+				}
 			}
+			mem.setReg(val1 & val2);
 		}
-		mem.setReg(val1&val2);
-      }
-    }
+	}
 
 
-	
-	if (instruction == "jmp")
-	{
+
+	if (instruction == "jmp") {
 		const oprand = words[1].toLowerCase();
 		let machCode = "";
-		
+
 		let jmpline = getLabelLine(oprand);
-		if(jmpline != -1)
-		{
+		if (jmpline != -1) {
 			lineNo = jmpline;
-			
+
 			machCode += "11101010";
 			machCode += jmpline.toString(2).padStart(16, "0");
 		}
-		else 
-		{
+		else {
 			console.log("ERROR: jmp called on unrecognized label");
-			MachCode += "NAN";
+			machCode += "NAN";
 		}
 		updateMachineCode(machCode);
 		return;
-	}	
+	}
 }
 
