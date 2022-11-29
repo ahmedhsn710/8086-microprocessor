@@ -288,7 +288,7 @@ function AsmToMch(code)
 				machCode += "00"; //mod
 				machCode += "000"; //fixed
 				machCode += "110"; //r/m
-				machCode += getLittleEndian( parseInt(secondop).toString(2).padStart(16, "0") ); //data
+				machCode += getLittleEndian( parseInt(memloc).toString(2).padStart(16, "0") ); //address
 			}
 
 			// memory in register (NEED TO CHECK MACHINE CODE FOR THIS)
@@ -306,7 +306,6 @@ function AsmToMch(code)
 				machCode += "00"; //mod
 				machCode += "000"; //fixed
 				machCode += "111"; //r/m <- NOT SURE ABOUT THIS
-				machCode += getLittleEndian( parseInt(secondop).toString(2).padStart(16, "0") ); //data
 			}	
 		}
 		
@@ -331,6 +330,7 @@ function AsmToMch(code)
 				machCode += "00"; //mod
 				machCode += getRegCode(firstop); //reg
 				machCode += "110"; //r/m
+				machCode += getLittleEndian( parseInt(memloc).toString(2).padStart(16, "0") ); //address
 			}
 
 			// Memory location in register (NEED TO CHECK MACHINE CODE FOR THIS)
@@ -374,6 +374,7 @@ function AsmToMch(code)
 				machCode += "00"; //mod
 				machCode += getRegCode(secondop); //reg
 				machCode += "110"; //r/m
+				machCode += getLittleEndian( parseInt(memloc).toString(2).padStart(16, "0") ); //address
 			}
 
 			// memory in register (NEED TO CHECK MACHINE CODE FOR THIS)
@@ -438,7 +439,7 @@ function AsmToMch(code)
 				machCode += "00"; //mod
 				machCode += "000"; //fixed
 				machCode += "110"; //r/m
-				machCode += getLittleEndian( parseInt(secondop).toString(2).padStart(16, "0") ); //data
+				machCode += getLittleEndian( parseInt(secondop).toString(2).padStart(16, "0") ); //address
 			}
 
 			// memory in register (NEED TO CHECK MACHINE CODE FOR THIS)
@@ -501,7 +502,7 @@ function AsmToMch(code)
 				machCode += "00"; //mod
 				machCode += "001"; //fixed
 				machCode += "110"; //r/m
-				machCode += getLittleEndian( parseInt(secondop).toString(2).padStart(16, "0") ); //data
+				machCode += getLittleEndian( parseInt(secondop).toString(2).padStart(16, "0") ); //address
 			}
 
 			// memory in register (NEED TO CHECK MACHINE CODE FOR THIS)
@@ -530,6 +531,8 @@ function AsmToMch(code)
 	if( instruction === "neg")
 	{
 		const operand = words[1];
+		let machCode = "";
+		
 		if(isregister(operand))
 		{
 			let reg = new Register(operand.toUpperCase());
@@ -537,6 +540,12 @@ function AsmToMch(code)
 			val = 65536 - val;
 			let str= val.toString(2);
 			reg.setReg(str);
+			
+			machCode += "1111011"; //op-code
+			machCode += "1" //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
+			machCode += "11"; //mod
+			machCode += "011"; //fixed
+			machCode += getRegCode(operand); //r/m			
 		}
 		if(ismemory(operand))
 		{
@@ -553,9 +562,16 @@ function AsmToMch(code)
 				val = 65536 - val;
 				let str= val.toString(2);
 				mem.setReg(str);
+				
+				machCode += "1111011"; //op-code
+				machCode += "1" //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
+				machCode += "00"; //mod
+				machCode += "011"; //fixed
+				machCode += "110"; //r/m
+				machCode += getLittleEndian( parseInt(memloc).toString(2).padStart(16, "0") ); //address
 			}
 
-			// memory in register 
+			// memory in register (NEED TO CHECK MACHINE CODE FOR THIS)
 			if(isregister(memloc))
 			{
 				let reg1 = new Register(memloc.toUpperCase());
@@ -566,14 +582,23 @@ function AsmToMch(code)
 				val = 65536 - val;
 				let str= val.toString(2);
 				mem.setReg(str);
+				
+				machCode += "1111011"; //op-code
+				machCode += "1" //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
+				machCode += "00"; //mod
+				machCode += "011"; //fixed
+				machCode += "111"; //r/m  <- NOT SURE ABOUT THIS
 			}			
 		}
+		updateMachineCode(machCode);
 		return;
 	}
 
 	if( instruction === "not")
 	{
 		const operand = words[1];
+		let machCode = "";
+		
 		if(isregister(operand))
 		{
 			let reg = new Register(operand.toUpperCase());
@@ -581,6 +606,12 @@ function AsmToMch(code)
 			val = 65535 - val;
 			let str= val.toString(2);
 			reg.setReg(str);
+			
+			machCode += "1111011"; //op-code
+			machCode += "1" //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
+			machCode += "11"; //mod
+			machCode += "010"; //fixed
+			machCode += getRegCode(operand); //r/m
 		}
 		if(ismemory(operand))
 		{
@@ -597,9 +628,16 @@ function AsmToMch(code)
 				val = 65535 - val;
 				let str= val.toString(2);
 				mem.setReg(str);
+				
+				machCode += "1111011"; //op-code
+				machCode += "1" //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
+				machCode += "00"; //mod
+				machCode += "010"; //fixed
+				machCode += "110"; //r/m
+				machCode += getLittleEndian( parseInt(memloc).toString(2).padStart(16, "0") ); //address
 			}
 
-			// memory in register 
+			// memory in register (NEED TO CHECK MACHINE CODE FOR THIS)
 			if(isregister(memloc))
 			{
 				let reg1 = new Register(memloc.toUpperCase());
@@ -610,23 +648,37 @@ function AsmToMch(code)
 				val = 65535 - val;
 				let str= val.toString(2);
 				mem.setReg(str);
+				
+				machCode += "1111011"; //op-code
+				machCode += "1" //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
+				machCode += "00"; //mod
+				machCode += "010"; //fixed
+				machCode += "111"; //r/m  <- NOT SURE ABOUT THIS
 			}			
 		}
+		updateMachineCode(machCode);
 		return;
 	}
 	
 	if (instruction == "jmp")
 	{
 		const oprand = words[1].toLowerCase();
+		let machCode = "";
+		
 		let jmpline = getLabelLine(oprand);
 		if(jmpline != -1)
 		{
 			lineNo = jmpline;
+			
+			machCode += "11101010";
+			machCode += jmpline.toString(2).padStart(16, "0");
 		}
 		else 
 		{
 			console.log("ERROR: jmp called on unrecognized label");
+			MachCode += "NAN";
 		}
+		updateMachineCode(machCode);
 		return;
 	}	
 }
