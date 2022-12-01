@@ -267,7 +267,7 @@ function AsmToMch(code) {
 		return;
 	}
 
-	if (instruction.toLowerCase() === "mov") {
+	if (instruction === "mov") {
 		const firstop = words[1].substring(0, words[1].length - 1).toLowerCase();
 		const secondop = words[2].toLowerCase();
 		let machCode = "";
@@ -285,13 +285,13 @@ function AsmToMch(code) {
 				if (reg1.reg_name[1].toLowerCase() === "l" && reg2.reg_name[1].toLowerCase() === "l") {
 					reg1.setLowerByte(reg2.getLowerByte().padStart(8, "0"));
 				}
-				if (reg1.reg_name[1].toLowerCase() === "h" && reg2.reg_name[1].toLowerCase() === "h") {
+				else if (reg1.reg_name[1].toLowerCase() === "h" && reg2.reg_name[1].toLowerCase() === "h") {
 					reg1.setHigherByte(reg2.getHigherByte().padStart(8, "0"));
 				}
-				if (reg1.reg_name[1].toLowerCase() === "l" && reg2.reg_name[1].toLowerCase() === "h") {
+				else if (reg1.reg_name[1].toLowerCase() === "l" && reg2.reg_name[1].toLowerCase() === "h") {
 					reg1.setLowerByte(reg2.getHigherByte().padStart(8, "0"));
 				}
-				if (reg1.reg_name[1].toLowerCase() === "h" && reg2.reg_name[1].toLowerCase() === "l") {
+				else if (reg1.reg_name[1].toLowerCase() === "h" && reg2.reg_name[1].toLowerCase() === "l") {
 					reg1.setHigherByte(reg2.getLowerByte().padStart(8, "0"));
 				}
 				else {
@@ -329,11 +329,11 @@ function AsmToMch(code) {
 				if (reg.reg_name[1].toLowerCase() === "l") {
 					reg.setLowerByte(parseInt(secondop));
 				}
-				if (reg.reg_name[1].toLowerCase() === "h") {
+				else if (reg.reg_name[1].toLowerCase() === "h") {
 					reg.setHigherByte(parseInt(secondop));
 				}
 				else {
-					console.log("Error!")
+					console.log("Error!");
 				}
 
 			}
@@ -413,7 +413,7 @@ function AsmToMch(code) {
 					if (reg1.reg_name[1].toLowerCase() === "l") {
 						reg1.setLowerByte(mem.getLowerByte().padStart(16, "0"));
 					}
-					if (reg1.reg_name[1].toLowerCase() === "h") {
+					else if (reg1.reg_name[1].toLowerCase() === "h") {
 						reg1.setHigherByte(mem.getLowerByte().padStart(16, "0"));
 					}
 					else {
@@ -455,7 +455,7 @@ function AsmToMch(code) {
 					if (reg1.reg_name[1].toLowerCase() === "l") {
 						reg1.setLowerByte(mem.getLowerByte().padStart(16, "0"));
 					}
-					if (reg1.reg_name[1].toLowerCase() === "h") {
+					else if (reg1.reg_name[1].toLowerCase() === "h") {
 						reg1.setHigherByte(mem.getLowerByte().padStart(16, "0"));
 					}
 					else {
@@ -498,7 +498,7 @@ function AsmToMch(code) {
 					if (reg2.reg_name[1].toLowerCase() === "l") {
 						mem.setLowerByte(reg2.getLowerByte().padStart(16, "0"));
 					}
-					if (reg2.reg_name[1].toLowerCase() === "h") {
+					else if (reg2.reg_name[1].toLowerCase() === "h") {
 						mem.setLowerByte(reg2.getHigherByte().padStart(16, "0"));
 					}
 					else {
@@ -540,7 +540,7 @@ function AsmToMch(code) {
 					if (reg2.reg_name[1].toLowerCase() === "l") {
 						mem.setLowerByte(reg2.getLowerByte().padStart(16, "0"));
 					}
-					if (reg2.reg_name[1].toLowerCase() === "h") {
+					else if (reg2.reg_name[1].toLowerCase() === "h") {
 						mem.setLowerByte(reg2.getHigherByte().padStart(16, "0"));
 					}
 					else {
@@ -571,22 +571,50 @@ function AsmToMch(code) {
 		return;
 	}
 
-	if (instruction.toLowerCase() === "inc") {
+	if (instruction === "inc") {
 		const operand = words[1].toLowerCase();
 
 		let machCode = "";
 
 		if (isregister(operand)) {
-
 			let reg = new Register(operand.toUpperCase());
-			let val = parseInt(reg.getReg(), 2);
-			val++;
-			reg.setReg(val);
+			
+			if(is8byteregister(operand))
+			{
+				if(reg.reg_name[1] === "H")
+				{
+					let val = parseInt(reg.getHigherByte(), 2);
+					val++;
+					reg.setHigherByte(val);
+				}
+				else if(reg.reg_name[1] === "L")
+				{
+					let val = parseInt(reg.getLowerByte(), 2);
+					val++;
+					reg.setLowerByte(val);
+				}
+				else{
+					console.log("error")
+				}
+			}
+			else
+			{
+				let val = parseInt(reg.getReg(), 2);
+				val++;
+				reg.setReg(val);
+			}
+			
 
 
 			machCode += "1111111"; //opcode
-
-			machCode += "1"; //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
+			if(is8byteregister){
+				machCode += "0";
+			}
+			else
+			{
+				machCode += "1";
+			}
+			
 			machCode += "11"; //mod
 			machCode += "000"; //fixed
 			machCode += getRegCode(operand); //r/mx
@@ -642,21 +670,50 @@ function AsmToMch(code) {
 		return;
 	}
 
-
 	if (instruction === "dec") {
 		const operand = words[1].toLowerCase();
 		let machCode = "";
 		if (isregister(operand)) {
 
 			let reg = new Register(operand.toUpperCase());
-			let val = parseInt(reg.getReg(), 2);
-			val--;
-			reg.setReg(val);
+			
+			if (isregister(operand)) {
+				let reg = new Register(operand.toUpperCase());
+				
+				if(is8byteregister(operand))
+				{
+					if(reg.reg_name[1] === "H")
+					{
+						let val = parseInt(reg.getHigherByte(), 2);
+						val--;
+						reg.setHigherByte(val);
+					}
+					else if(reg.reg_name[1] === "L")
+					{
+						let val = parseInt(reg.getLowerByte(), 2);
+						val--;
+						reg.setLowerByte(val);
+					}
+					else{
+						console.log("error")
+					}
+				}
+				else
+				{
+					let val = parseInt(reg.getReg(), 2);
+					val--;
+					reg.setReg(val);
+				}
 
-
+			}
 			machCode += "1111111"; //opcode
-
-			machCode += "1"; //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
+			if(is8byteregister){
+				machCode += "0";
+			}
+			else
+			{
+				machCode += "1";
+			}
 			machCode += "11"; //mod
 			machCode += "001"; //reg
 			machCode += getRegCode(operand); //r/m
@@ -718,16 +775,42 @@ function AsmToMch(code) {
 		let machCode = "";
 
 		if (isregister(operand)) {
-
 			let reg = new Register(operand.toUpperCase());
-			let val = parseInt(reg.getReg(), 2);
-			val = 65536 - val;
-			let str = val.toString(2);
-			reg.setReg(str);
+			
+			if(is8byteregister(operand))
+			{
+				if(reg.reg_name[1] === "H")
+				{
+					let val = parseInt(reg.getHigherByte(), 2);
+					val = 256 - val;
+					reg.setHigherByte(val);
+				}
+				else if(reg.reg_name[1] === "L")
+				{
+					let val = parseInt(reg.getLowerByte(), 2);
+					val = 256 - val;
+					reg.setLowerByte(val);
+				}
+				else{
+					console.log("error")
+				}
+			}
+			else
+			{
+				let val = parseInt(reg.getReg(), 2);
+				val = 35536 - val;
+				reg.setReg(val);
+			}
+			
 
 			machCode += "1111011"; //op-code
-			machCode += "1" //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
-			machCode += "11"; //mod
+			if(is8byteregister){
+				machCode += "0";
+			}
+			else
+			{
+				machCode += "1";
+			}machCode += "11"; //mod
 			machCode += "011"; //fixed
 			machCode += getRegCode(operand); //r/m			
 		}
@@ -784,15 +867,41 @@ function AsmToMch(code) {
 		let machCode = "";
 
 		if (isregister(operand)) {
-
 			let reg = new Register(operand.toUpperCase());
-			let val = parseInt(reg.getReg(), 2);
-			val = 65535 - val;
-			let str = val.toString(2);
-			reg.setReg(str);
+			
+			if(is8byteregister(operand))
+			{
+				if(reg.reg_name[1] === "H")
+				{
+					let val = parseInt(reg.getHigherByte(), 2);
+					val = 255 - val;
+					reg.setHigherByte(val);
+				}
+				else if(reg.reg_name[1] === "L")
+				{
+					let val = parseInt(reg.getLowerByte(), 2);
+					val = 255 - val;
+					reg.setLowerByte(val);
+				}
+				else{
+					console.log("error")
+				}
+			}
+			else
+			{
+				let val = parseInt(reg.getReg(), 2);
+				val = 35535 - val;
+				reg.setReg(val);
+			}
 
 			machCode += "1111011"; //op-code
-			machCode += "1" //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
+			if(is8byteregister){
+				machCode += "0";
+			}
+			else
+			{
+				machCode += "1";
+			}
 			machCode += "11"; //mod
 			machCode += "010"; //fixed
 			machCode += getRegCode(operand); //r/m
