@@ -1215,7 +1215,168 @@ function AsmToMch(code) {
 			mem.setReg(val1 & val2);
 		}
 	}
+	
+	if (instruction === "add")
+	{
+		const firstop = words[1].substring(0, words[1].length - 1).toLowerCase();
+		const secondop = words[2].toLowerCase();
+		let machCode = "";
+		if (isregister(firstop))// First operand is a register. This has three cases.
+		{
+			let reg1 = new Register(firstop.toUpperCase());
+			let val1;
+			let val2;
+			
+			if (is8byteregister(firstop))
+			{
+				if(firstop[1] == "l") val1 = parseInt(reg1.getLowerByte(), 2);
+				else val1 = parseInt(reg1.getHigherByte(), 2);
+			}
+			else val1 = parseInt(reg1.getReg(), 2);
+			
+			if (isnumber(secondop)) // case1. Second operand is immediete.
+			{
+				val2 = parseInt(secondop);
+				
+				machCode += "100000"; //opcode
+				machCode += "0"; // s-bit 
+				// w-bit added at end
+				machCode += "11"; // mod
+				machCode += "000"; // fixed
+				machCode += getRegCode(firstop); // r/m				
+				if (is8byteregister(firstop))
+					machCode += parseInt(secondop).toString(2).padStart(8, "0").substr(0,8); //data
+				else 
+					machCode += getLittleEndian(parseInt(secondop).toString(2).padStart(16, "0")); //data
+			}
 
+			if (isregister(secondop))// case2. Second operand is also a register.
+			{
+				let reg2 = new Register(secondop.toUpperCase());
+				if (is8byteregister(secondop))
+				{
+					if(secondop[1] == "l") val2 = parseInt(reg2.getLowerByte(), 2);
+					else val2 = parseInt(reg2.getHigherByte(), 2);
+				}
+				else val2 = parseInt(reg2.getReg(), 2);
+				console.log(val2);
+				machCode += "000000"; //opcode
+				machCode += "0"; // d-bit
+				// w-bit added at end
+				machCode += "11"; // mod
+				machCode += getRegCode(firstop); // reg
+				machCode += getRegCode(secondop); // r/m
+			}
+			if (ismemory(secondop))// case3. Second operand is memory.
+			{
+				const memloc = secondop.substring(1, secondop.length - 1); //remove []
+				let hexmem;
+				
+				machCode += "000000"; //opcode
+				machCode += "1"; // d-bit
+				// w-bit added at end
+				machCode += "00"; // mod
+				machCode += getRegCode(firstop); // reg
+				
+				if (isregister(memloc))//case1. Memory is inside reg.
+				{
+					let reg2 = new Register(memloc.toUpperCase());
+					hexmem = parseInt(reg2.getReg().padStart(16, "0"), 2).toString(16); //contains hex of reg1 data.
+					
+					machCode += "111" // r/m <- NOT USRE ABOUT THIS
+				}
+				if (isnumber(memloc))//case 2. Memory is given directly.
+				{
+					hexmem = parseInt(memloc, 10).toString(16); // converts int num inside brackets to hex
+					
+					machCode += "110" // r/m					
+					machCode += getLittleEndian(parseInt(memloc).toString(2).padStart("1", 16)); //address
+				}				
+				hexmem = "f" + hexmem;
+				let mem = new Register(hexmem.toUpperCase());
+				val2 = parseInt(mem.getReg(), 2);
+			}
+			
+			if (is8byteregister(firstop))
+			{
+				if(firstop[1] == "l") reg1.setLowerByte(val1 + val2);
+				else reg1.setHigherByte(val1 + val2);
+				
+				machCode = machCode.substr(0,7) + "0" + machCode.substr(7);
+			}
+			else 
+			{
+				reg1.setReg(val1 + val2);
+				machCode = machCode.substr(0,7) + "1" + machCode.substr(7);
+			}
+		}
+		if (ismemory(firstop))//First operand is memory. This has two cases.
+		{
+			const memloc = firstop.substring(1, firstop.length - 1); //remove []
+			let hexmem;
+			let val1;
+			let reg1;
+			let val2;
+			let rmCode;
+			
+			if (isregister(memloc))//case1. memory is inside a register
+			{
+				reg1 = new Register(memloc.toUpperCase());
+				hexmem = parseInt(reg1.getReg().padStart(16, "0"), 2).toString(16); //contains hex of reg1 data.
+				rmCode = "111";
+			}
+			if (isnumber(memloc))//case2. Memory available directly
+			{
+				hexmem = parseInt(memloc).toString(16); // converts int num inside brackets to hex
+				rmCode = "110"
+				rmCode += getLittleEndian(parseInt(memloc).toString(2).padStart("1", 16)); //address
+			}
+			
+			hexmem = "f" + hexmem;
+			let mem = new Register(hexmem.toUpperCase());
+			val1 = parseInt(mem.getReg(), 2);			
+			
+			if (isregister(secondop))//case 1. Second operand is a register.
+			{
+				machCode += "000000"; //opcode
+				machCode += "0"; // d-bit
+				
+				let reg2 = new Register(secondop.toUpperCase());
+				if (is8byteregister(secondop))
+				{
+					if(secondop[1] == "l") val2 = parseInt(reg2.getLowerByte(), 2);
+					else val2 = parseInt(reg2.getHigherByte(), 2);
+					
+					machCode += "0" // w-bit
+				}
+				else 
+				{
+					val2 = parseInt(reg2.getReg(), 2);
+					
+					machCode += "1" // w-bit
+				}
+				
+				machCode += "00"; // mod
+				machCode += getRegCode(secondop); // reg
+				machCode += rmCode; // r/m
+			}
+			if (isnumber(secondop))//case2. Second operand is a number.
+			{
+				val2 = parseInt(secondop);
+				
+				machCode += "100000"; //opcode
+				machCode += "0"; // s-bit 
+				machCode += ( val2 <= 255 ? "0" : "1" );								
+				machCode += "00"; // mod
+				machCode += "000"; // fixed
+				machCode += rmCode; // r/m
+				machCode += getLittleEndian(parseInt(secondop).toString(2).padStart(16, "0")); //data
+			}
+			mem.setReg(val1 + val2);
+		}
+		updateMachineCode(machCode);
+		return;
+	}
 
 	if (instruction == "jmp") {
 		const oprand = words[1].toLowerCase();
@@ -1236,4 +1397,3 @@ function AsmToMch(code) {
 		return;
 	}
 }
-
