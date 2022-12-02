@@ -284,7 +284,14 @@ function getLabelLine(name) {
 
 function isnumber(val) {
 	let count = 0;
-	for (let i = 0; i < val.length; i++) {
+	let start = 0;
+	if(val[0] === '-'){
+		start = 1;
+		count++;
+	}
+		
+
+	for (let i = start; i < val.length; i++) {
 		for (let j = 0; j < digits.length; j++) {
 			if (val[i] === digits[j]) {
 				count++;
@@ -292,10 +299,26 @@ function isnumber(val) {
 		}
 	}
 
-	if (count === val.length) {
+	if (val[val.length-1] === 'b' || val[val.length-1] === 'h') {
+		count++;
+	}
+
+
+
+	if (count >= val.length) {
 		return true;
 	}
 	return false;
+}
+
+function setnumber(secondop){
+	if(secondop.charAt(secondop.length-1) === 'b'){
+		secondop = parseInt(secondop.substring(0, secondop.length-1), 2).toString();
+	}
+	else if(secondop.charAt(secondop.length-1) === 'h'){
+		secondop = parseInt(secondop.substring(0, secondop.length-1), 16).toString();
+	}
+	return secondop;
 }
 
 function reverseString(str) {
@@ -365,7 +388,7 @@ function AsmToMch(code) {
 
 	if (instruction === "mov") {
 		const firstop = words[1].substring(0, words[1].length - 1).toLowerCase();
-		const secondop = words[2].toLowerCase();
+		let secondop = words[2].toLowerCase();
 		let machCode = "";
 		console.log("OHH YEAAAA! mov");
 
@@ -420,8 +443,9 @@ function AsmToMch(code) {
 		if (isregister(firstop) && isnumber(secondop)) {
 			console.log("OHH YEAAAA! immediate");
 			let reg = new Register(firstop.toUpperCase());
-
-
+			secondop = setnumber(secondop);
+			
+			
 			if (is8byteregister(firstop)) {
 
 				if (reg.reg_name[1].toLowerCase() === "l") {
@@ -457,7 +481,7 @@ function AsmToMch(code) {
 		// Immidate data to memory
 		if (ismemory(firstop) && isnumber(secondop)) {
 			const memloc = firstop.substring(1, firstop.length - 1); //remove []
-
+			secondop = setnumber(secondop);
 			// Direct memory
 			if (isnumber(memloc)) {
 				console.log("OHH YEAAAA! MEM DIRECT");
