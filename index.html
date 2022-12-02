@@ -63,7 +63,49 @@
         </nav>
 
 
+        <div class="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0" style="margin-top: 50px;">
+
+          <canvas id="myCanvas" width="400" height="400" style="border:1px solid white;
+            background-color: white;">
+            Your browser does not support the HTML5 canvas tag.</canvas>
+        </div>
+
+
+
+      </div>
+    </div>
+  </section>
+
+
+  <section class="text-gray-400 bg-gray-900 body-font overflow-hidden">
+    <div class="container px-5 py-24 mx-auto">
+      <div class="lg:w-4/5 mx-auto flex flex-wrap">
+
         <div style="margin-top: 0px;">
+
+          <div style="display: flex; margin:10px;">
+            <h2 class="text-sm title-font text-gray-500 tracking-widest">Instruction</h2>
+            <div style="display: flex; margin:10px; width: 200px;">
+              <table style="margin:10px; ">
+                <tr>
+                  <td id="CurrInst" , style="background-color: white; border: 2px solid #061731; color: #061731;">Nan
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <div style="display: flex; margin:10px;">
+            <h2 class="text-sm title-font text-gray-500 tracking-widest">Machine Code</h2>
+            <div style="display: flex; margin:10px;  width: 200px;">
+              <table style="margin:10px;">
+                <tr>
+                  <td id="MachCode" , style="background-color: white; border: 2px solid #061731; color: #061731;">
+                    0000000000000000</td>
+                </tr>
+              </table>
+            </div>
+          </div>
 
           <div id="regs" class="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0" style="margin-top: 50px;">
 
@@ -391,45 +433,9 @@
 
           </div>
 
-          <div style="display: flex; margin:10px;">
-            <h2 class="text-sm title-font text-gray-500 tracking-widest">Instruction</h2>
-            <div style="display: flex; margin:10px; width: 200px;">
-              <table style="margin:10px; ">
-                <tr>
-                  <td id="CurrInst" , style="background-color: white; border: 2px solid #061731; color: #061731;">Nan
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </div>
-
-          <div style="display: flex; margin:10px;">
-            <h2 class="text-sm title-font text-gray-500 tracking-widest">Machine Code</h2>
-            <div style="display: flex; margin:10px;  width: 200px;">
-              <table style="margin:10px;">
-                <tr>
-                  <td id="MachCode" , style="background-color: white; border: 2px solid #061731; color: #061731;">
-                    0000000000000000</td>
-                </tr>
-              </table>
-            </div>
-          </div>
-
-          
-        </div>
-      </div>
-    </div>
-  </section>
 
 
-  <section class="text-gray-400 bg-gray-900 body-font overflow-hidden">
-    <div class="container px-5 py-24 mx-auto">
-      <div class="lg:w-4/5 mx-auto flex flex-wrap">
-        <div class="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
 
-          <canvas id="myCanvas" width="400" height="400" style="border:1px solid white;
-            background-color: white;">
-            Your browser does not support the HTML5 canvas tag.</canvas>
         </div>
 
         <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">

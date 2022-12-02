@@ -2,8 +2,9 @@
   
   .editor-container {
     float: left;
+    margin-top: 50px;
     width: 400px;
-    height: 500px;
+    height: 400px;
     top: auto;
     bottom: auto;
     position: relative;
