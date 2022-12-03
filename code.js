@@ -926,7 +926,6 @@ function AsmToMchForAddLikeInstr(firstop, secondop, opcode, valOfRegWhenImm, fun
 		
 		result = func_w_2params(val1, val2);
 		
-		if(result === 0) setFlagState("zero_flag", "1");
 		
 		let sixthbit = (sbit + dbit).toString(); // SUPER MEGA BRAIN CODE TO FIGURE OUT 6TH BIT
 		machCode = machCode.substr(0,6) + sixthbit + machCode.substr(6);
@@ -1008,11 +1007,13 @@ function AsmToMchForAddLikeInstr(firstop, secondop, opcode, valOfRegWhenImm, fun
 			machCode += getLittleEndian(parseInt(secondop).toString(2).padStart(16, "0")); //data
 		}
 		result = func_w_2params(val1, val2);
-		if (result === 0) setFlagState("zero_flag", "1");
+		
 		mem.setReg(result);
 	}
 	console.log(machCode);
 	updateMachineCode(machCode);
+	if (result === 0) setFlagState("zero_flag", "1");
+	else setFlagState("zero_flag", "0");
 	return machCode;
 }
 
