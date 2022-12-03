@@ -729,7 +729,167 @@ function AsmToMch(code) {
 
 		return machCode;
 	}
-
+	
+	if (instruction === "xchg") {
+		const firstop = words[1].substring(0, words[1].length - 1).toLowerCase();
+		const secondop = words[2].toLowerCase();
+		let machCode = "";
+		if (isregister(firstop)) // First operand is a register
+		{
+			let reg1 = new Register(firstop.toUpperCase());
+			let val1;
+			let val2;
+			
+			if (is8byteregister(firstop))
+			{
+				if(firstop[1] == "l") val1 = parseInt(reg1.getLowerByte(), 2);
+				else val1 = parseInt(reg1.getHigherByte(), 2);
+			}
+			else 
+				val1 = parseInt(reg1.getReg(), 2);
+	
+			if (isregister(secondop))// Second operand is also a register.
+			{			
+				let reg2 = new Register(secondop.toUpperCase());
+				if (is8byteregister(secondop))
+				{
+					if(secondop[1] == "l") 
+					{
+						val2 = parseInt(reg2.getLowerByte(), 2);
+						reg2.setLowerByte(val1);
+					}
+					else 
+					{
+						val2 = parseInt(reg2.getHigherByte(), 2);
+						reg2.setHigherByte(val1);
+					}
+				}
+				else 
+				{
+					val2 = parseInt(reg2.getReg(), 2);
+					reg2.setReg(val1);
+				}
+				
+				
+				machCode += "1000011"; //opcode
+				// w-bit added at end
+				machCode += "11"; // mod
+				machCode += getRegCode(firstop); // reg
+				machCode += getRegCode(secondop); // r/m
+				
+				alu(code, machCode, firstop + "<->" + secondop);
+			}
+			if (ismemory(secondop))// Second operand is memory.
+			{			
+				const memloc = secondop.substring(1, secondop.length - 1); //remove []
+				let hexmem;
+				
+				machCode += "1000011"; //opcode
+				// w-bit added at end
+				machCode += "00"; // mod
+				machCode += getRegCode(firstop); // reg
+				
+				if (isregister(memloc))//case1. Memory is inside reg.
+				{
+					let reg2 = new Register(memloc.toUpperCase());
+					hexmem = parseInt(reg2.getReg().padStart(16, "0"), 2).toString(16); //contains hex of reg1 data.
+					
+					machCode += "111" // r/m <- NOT USRE ABOUT THIS
+				}
+				if (isnumber(memloc))//case 2. Memory is given directly.
+				{
+					hexmem = parseInt(memloc, 10).toString(16); // converts int num inside brackets to hex
+					
+					machCode += "110" // r/m					
+					machCode += getLittleEndian(parseInt(memloc).toString(2).padStart("1", 16)); //address
+				}				
+				hexmem = "f" + hexmem;
+				let mem = new Register(hexmem.toUpperCase());
+				val2 = parseInt(mem.getReg(), 2);
+				mem.setReg(val1);
+				
+				memalu(code, machCode, secondop+" -> ALU", firstop + "<->" + secondop);
+			}
+			
+			if (is8byteregister(firstop))
+			{
+				if(firstop[1] == "l") reg1.setLowerByte(val2);
+				else reg1.setHigherByte(val2);
+				
+				machCode = machCode.substr(0,7) + "0" + machCode.substr(7);
+			}
+			else 
+			{
+				reg1.setReg(val2);
+				
+				machCode = machCode.substr(0,7) + "1" + machCode.substr(7);
+			}
+		}
+		if (ismemory(firstop))//First operand is memory
+		{
+			const memloc = firstop.substring(1, firstop.length - 1); //remove []
+			let hexmem;
+			let val1;
+			let reg1;
+			let val2;
+			let rmCode;
+			
+			if (isregister(memloc))//case1. memory is inside a register
+			{
+				reg1 = new Register(memloc.toUpperCase());
+				hexmem = parseInt(reg1.getReg().padStart(16, "0"), 2).toString(16); //contains hex of reg1 data.
+				rmCode = "111";
+			}
+			if (isnumber(memloc))//case2. Memory available directly
+			{
+				hexmem = parseInt(memloc).toString(16); // converts int num inside brackets to hex
+				rmCode = "110"
+				rmCode += getLittleEndian(parseInt(memloc).toString(2).padStart("1", 16)); //address
+			}
+			
+			hexmem = "f" + hexmem;
+			let mem = new Register(hexmem.toUpperCase());
+			val1 = parseInt(mem.getReg(), 2);			
+			
+			if (isregister(secondop))//Second operand is a register.
+			{
+				machCode += "1000011"; //opcode
+				
+				let reg2 = new Register(secondop.toUpperCase());
+				if (is8byteregister(secondop))
+				{
+					if(secondop[1] == "l") 
+					{
+						val2 = parseInt(reg2.getLowerByte(), 2);
+						reg2.setLowerByte(val1);
+					}
+					else 
+					{
+						val2 = parseInt(reg2.getHigherByte(), 2);
+						reg2.setHigherByte(val1);
+					}
+					
+					machCode += "0" // w-bit
+				}
+				else 
+				{
+					val2 = parseInt(reg2.getReg(), 2);
+					reg2.setReg(val1);
+					
+					machCode += "1" // w-bit
+				}
+				
+				machCode += "00"; // mod
+				machCode += getRegCode(secondop); // reg
+				machCode += rmCode; // r/m
+			}			
+			mem.setReg(val2);
+			memalumem(code, machCode, firstop + " -> ALU", firstop + "<->" + secondop, "ALU -> "+ firstop );
+		}
+		updateMachineCode(machCode);
+		return;
+	}
+	
 	if (instruction === "inc") {
 		const operand = words[1].toLowerCase();
 		const opcode = "1111111";
@@ -864,7 +1024,27 @@ function AsmToMch(code) {
 		
 		return ; 
 	}
-
+		
+	if (instruction === "cmp") {
+		const firstop = words[1].substring(0, words[1].length - 1).toLowerCase();
+		const secondop = words[2].toLowerCase();
+		let opcode = "01110";
+		let fixed = "111"
+		function doNothing(val1, val2) { return val1; }
+		
+		let machcode = AsmToMchForAddLikeInstr(firstop, secondop, opcode, fixed, doNothing); 
+		
+		if(isregister(firstop)){
+			if(ismemory(secondop)) memalu(code, machcode, secondop+" -> ALU", "cmp(" + firstop + ", " + secondop + ")");
+			else alu(code, machcode, "cmp(" + firstop + ", " + secondop + ")");
+		}
+		else if(ismemory(firstop)){
+			memalumem(code, machcode, firstop + " -> ALU","cmp(" + firstop + ", " + secondop + ")", "ALU -> "+ firstop );
+		}
+		
+		return;
+	}
+	
 	if (instruction == "jmp") {
 		const oprand = words[1].toLowerCase();
 		let machCode = "";
@@ -1079,7 +1259,6 @@ function AsmToMchForAddLikeInstr(firstop, secondop, opcode, valOfRegWhenImm, fun
 		
 		mem.setReg(result);
 	}
-	console.log(machCode);
 	updateMachineCode(machCode);
 	if (result === 0) setFlagState("zero_flag", "1");
 	else setFlagState("zero_flag", "0");
