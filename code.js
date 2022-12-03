@@ -1030,9 +1030,16 @@ function AsmToMch(code) {
 		const secondop = words[2].toLowerCase();
 		let opcode = "01110";
 		let fixed = "111"
-		function doNothing(val1, val2) { return val1; }
+		let zflag = false;
+		function doNothing(val1, val2) { 
+			zflag = val1 === val2
+			return val1; 
+		}
 		
 		let machcode = AsmToMchForAddLikeInstr(firstop, secondop, opcode, fixed, doNothing); 
+		
+		if( zflag ) setFlagState("zero_flag", "1");
+		else setFlagState("zero_flag", "0");
 		
 		if(isregister(firstop)){
 			if(ismemory(secondop)) memalu(code, machcode, secondop+" -> ALU", "cmp(" + firstop + ", " + secondop + ")");
@@ -1078,6 +1085,16 @@ function AsmToMch(code) {
 		const trigger = !getFlagState("zero_flag");
 
 		return AsmToMachForConditionalJmpInstr(oprand, opcode, trigger);
+	}
+	
+	if (instruction == "nop") {
+		let machCode = "10000111" //opcode + w
+		machCode += "11000000" // mod + reg + r/m
+		
+		alu(code, machCode, "ax <-> ax");
+		
+		updateMachineCode(machCode);
+		return;
 	}
 }
 
