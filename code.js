@@ -120,6 +120,26 @@ async function memalumem(inst, machcode, mem1, process, mem2){
 	drawBox("Memory", "", 50, 250);	
 }
 
+async function memalu(inst, machcode, mem, process){
+	await fetchdecode(inst, machcode);
+	changeColor("Memory", mem, 50, 250);
+	await sleep(2000);
+	drawBox("Memory", "", 50, 250);	
+	changeColor("ALU", process, 250, 250);
+	await sleep(2000);
+	drawBox("ALU", "", 250, 250);
+}
+
+async function alumem(inst, machcode, process, mem){
+	await fetchdecode(inst, machcode);
+	changeColor("ALU", process, 250, 250);
+	await sleep(2000);
+	drawBox("ALU", "", 250, 250);
+	changeColor("Memory", mem, 50, 250);
+	await sleep(2000);
+	drawBox("Memory", "", 50, 250);	
+}
+
 // Generic R/M class
 class Register {
 	constructor(reg_name) {
@@ -715,8 +735,10 @@ function AsmToMch(code) {
 		const opcode = "1111111";
 		const fixedRegBits = "000";
 		function increment(val) { return val + 1; }
-		
-		return AsmToMachForSingleOpInstr(operand, opcode, fixedRegBits, increment, increment);
+		let machcode = AsmToMachForSingleOpInstr(operand, opcode, fixedRegBits, increment, increment);
+		if(isregister(operand)) alu(code, machcode, operand + " += 1 ");
+		else if (ismemory(operand)) memalumem(code, machcode,operand + " -> ALU", "value += 1", "ALU -> " + operand );
+		return ;
 	}
 
 	if (instruction === "dec") {
@@ -724,8 +746,10 @@ function AsmToMch(code) {
 		const opcode = "1111111";
 		const fixedRegBits = "001";
 		function decrement(val) { return val - 1; }
-		
-		return AsmToMachForSingleOpInstr(operand, opcode, fixedRegBits, decrement, decrement);
+		let machcode = AsmToMachForSingleOpInstr(operand, opcode, fixedRegBits, decrement, decrement);
+		if(isregister(operand)) alu(code, machcode, operand + " -= 1 ");
+		else if (ismemory(operand)) memalumem(code, machcode,operand + " -> ALU", "value -= 1", "ALU -> " + operand );
+		return ;
 	}
 
 	if (instruction === "neg") {
@@ -734,8 +758,11 @@ function AsmToMch(code) {
 		const fixedRegBits = "011";
 		function negationByte(val) { return 256 - val; }
 		function negationWord(val) { return 65536 - val; }
+		let machcode = AsmToMachForSingleOpInstr(operand, opcode, fixedRegBits, negationWord, negationByte);
+		if(isregister(operand)) alu(code, machcode, operand + " 2s comlpement");
+		else if (ismemory(operand)) memalumem(code, machcode,operand + " -> ALU", operand + " 2s comlpement", "ALU -> " + operand );
 		
-		return AsmToMachForSingleOpInstr(operand, opcode, fixedRegBits, negationWord, negationByte);
+		return ;
 	}
 
 	if (instruction === "not") {
@@ -744,6 +771,10 @@ function AsmToMch(code) {
 		const fixedRegBits = "010";
 		function negationByte(val) { return 255 - val; }
 		function negationWord(val) { return 65535 - val; }
+		let machcode = AsmToMachForSingleOpInstr(operand, opcode, fixedRegBits, negationWord, negationByte);
+		if(isregister(operand)) alu(code, machcode, operand +" 1s complement");
+		else if (ismemory(operand)) memalumem(code, machcode,operand + " -> ALU", operand +" 1s complement", "ALU -> " + operand );
+		return;
 	}
 
 	if (instruction === "and") {
@@ -752,8 +783,15 @@ function AsmToMch(code) {
 		let opcode = "00100";
 		let fixed = "100"
 		function and_er(val1, val2) { return val1 & val2; }
-		
-		return AsmToMchForAddLikeInstr(firstop, secondop, opcode, fixed, and_er);
+		let machcode =  AsmToMchForAddLikeInstr(firstop, secondop, opcode, fixed, and_er);
+		if(isregister(firstop)){
+			if(ismemory(secondop)) memalu(code, machcode, secondop+" -> ALU", firstop + " && " + secondop);
+			else alu(code, machcode, firstop + " && " + secondop)
+		}
+		else if(ismemory(firstop)){
+			memalumem(code, machcode, firstop + " -> ALU",firstop + " && " + secondop, "ALU -> "+ firstop )
+		}
+		return;
 	}
 	
 	if (instruction === "or") {
@@ -762,8 +800,16 @@ function AsmToMch(code) {
 		let opcode = "00010";
 		let fixed = "001"
 		function or_er(val1, val2) { return val1 | val2; }
+		let machcode =  AsmToMchForAddLikeInstr(firstop, secondop, opcode, fixed, or_er);
+		if(isregister(firstop)){
+			if(ismemory(secondop)) memalu(code, machcode, secondop+" -> ALU", firstop + " || " + secondop);
+			else alu(code, machcode, firstop + " || " + secondop)
+		}
+		else if(ismemory(firstop)){
+			memalumem(code, machcode, firstop + " -> ALU",firstop + " || " + secondop, "ALU -> "+ firstop)
+		}
 		
-		return AsmToMchForAddLikeInstr(firstop, secondop, opcode, fixed, or_er);
+		return;
 	}
 	
 	if (instruction === "xor") {
@@ -772,8 +818,16 @@ function AsmToMch(code) {
 		let opcode = "01100";
 		let fixed = "110"
 		function xor_er(val1, val2) { return val1 ^ val2; }
+		let machcode = AsmToMchForAddLikeInstr(firstop, secondop, opcode, fixed, xor_er);
+		if(isregister(firstop)){
+			if(ismemory(secondop)) memalu(code, machcode, secondop+" -> ALU", firstop + " xor " + secondop);
+			else alu(code, machcode, firstop + " xor " + secondop)
+		}
+		else if(ismemory(firstop)){
+			memalumem(code, machcode, firstop + " -> ALU",firstop + " xor " + secondop, "ALU -> "+ firstop )
+		}
 		
-		return AsmToMchForAddLikeInstr(firstop, secondop, opcode, fixed, xor_er); 
+		return ; 
 	}
 	
 	if (instruction === "add") {
@@ -782,8 +836,15 @@ function AsmToMch(code) {
 		let opcode = "00000";
 		let fixed = "000"
 		function adder(val1, val2) { return val1 + val2; }
-		
-		return AsmToMchForAddLikeInstr(firstop, secondop, opcode, fixed, adder); 
+		let machcode = AsmToMchForAddLikeInstr(firstop, secondop, opcode, fixed, adder);
+		if(isregister(firstop)){
+			if(ismemory(secondop)) memalu(code, machcode, secondop+" -> ALU", firstop + " + " + secondop);
+			else alu(code, machcode, firstop + " + " + secondop)
+		}
+		else if(ismemory(firstop)){
+			memalumem(code, machcode, firstop + " -> ALU",firstop + " + " + secondop, "ALU -> "+ firstop )
+		}
+		return ; 
 	}
 	
 	if (instruction === "sub") {
@@ -792,8 +853,16 @@ function AsmToMch(code) {
 		let opcode = "01010";
 		let fixed = "101"
 		function subtracter(val1, val2) { return val1 - val2; }
+		let machcode = AsmToMchForAddLikeInstr(firstop, secondop, opcode, fixed, subtracter);
+		if(isregister(firstop)){
+			if(ismemory(secondop)) memalu(code, machcode, secondop+" -> ALU", firstop + " - " + secondop);
+			else alu(code, machcode, firstop + " - " + secondop)
+		}
+		else if(ismemory(firstop)){
+			memalumem(code, machcode, firstop + " -> ALU",firstop + " - " + secondop, "ALU -> "+ firstop )
+		}
 		
-		return AsmToMchForAddLikeInstr(firstop, secondop, opcode, fixed, subtracter); 
+		return ; 
 	}
 
 	if (instruction == "jmp") {
