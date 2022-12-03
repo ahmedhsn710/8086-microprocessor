@@ -12,7 +12,7 @@ let regs16 = [["ax", "000"], ["bx", "011"], ["cx", "001"], ["dx", "010"],
 
 // An array of pairs where first item is label name and second item is line no.
 let labels = [];
-
+	
 
 let regs8 = [["ah", "000"], ["al", "000"], ["bh", "011"], ["bl", "011"],
 ["ch", "001"], ["cl", "001"], ["dh", "010"], ["dl", "010"]];
@@ -213,13 +213,12 @@ run.addEventListener('click', () => {
 
 // Decode Button Click
 decode.addEventListener('click', () => {
-	if (lineNo < code.length) {
-
-		AsmToMch(code[lineNo]);
+	if (lineNo < code.length) 
+	{
 		console.log(code[lineNo]);
 		document.getElementById("CurrInst").innerText = code[lineNo];
+		AsmToMch(code[lineNo]);
 		lineNo++;
-
 	}
 })
 
@@ -713,400 +712,38 @@ function AsmToMch(code) {
 
 	if (instruction === "inc") {
 		const operand = words[1].toLowerCase();
-
-		let machCode = "";
-
-		if (isregister(operand)) {
-			let reg = new Register(operand.toUpperCase());
-			
-			if(is8byteregister(operand))
-			{
-				if(reg.reg_name[1] === "H")
-				{
-					let val = parseInt(reg.getHigherByte(), 2);
-					val++;
-					reg.setHigherByte(val);
-				}
-				else if(reg.reg_name[1] === "L")
-				{
-					let val = parseInt(reg.getLowerByte(), 2);
-					val++;
-					reg.setLowerByte(val);
-				}
-				else{
-					console.log("error")
-				}
-			}
-			else
-			{
-				let val = parseInt(reg.getReg(), 2);
-				val++;
-				reg.setReg(val);
-			}
-			
-
-
-			machCode += "1111111"; //opcode
-			if(is8byteregister){
-				machCode += "0";
-			}
-			else
-			{
-				machCode += "1";
-			}
-			
-			machCode += "11"; //mod
-			machCode += "000"; //fixed
-			machCode += getRegCode(operand); //r/mx
-
-			alu(code, machCode, operand + " += 1 ");
-		}
-		if (ismemory(operand)) {
-			const memloc = operand.substring(1, operand.length - 1); //remove []
-
-			// Direct memory 
-			if (isnumber(memloc)) {
-				let hexmem = parseInt(memloc, 10).toString(16); // converts int num inside brackets to hex
-				hexmem = "f" + hexmem;
-				console.log(hexmem);
-				let mem = new Register(hexmem.toUpperCase());
-				let val = parseInt(mem.getReg(), 2);
-				val++;
-				mem.setReg(val);
-
-
-				machCode += "1111111"; //opcode
-
-				machCode += "1"; //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
-				machCode += "00"; //mod
-				machCode += "000"; //fixed
-				machCode += "110"; //r/m
-
-				machCode += getLittleEndian(parseInt(memloc).toString(2).padStart(16, "0")); //address
-
-				memalumem(code, machCode,operand + " -> ALU", "value += 1", "ALU -> " + operand );
-
-			}
-
-			// memory in register (NEED TO CHECK MACHINE CODE FOR THIS)
-			if (isregister(memloc)) {
-				let reg1 = new Register(memloc.toUpperCase());
-				let hexmem = parseInt(reg1.getReg().padStart(16, "0"), 2).toString(16); //contains hex of reg1 data.
-				hexmem = "f" + hexmem;
-				let mem = new Register(hexmem.toUpperCase());
-				let val = parseInt(mem.getReg(), 2);
-				val++;
-				mem.setReg(val);
-
-
-				machCode += "1111111"; //opcode
-
-				machCode += "1"; //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
-				machCode += "00"; //mod
-				machCode += "000"; //fixed
-				machCode += "111"; //r/m  <- NOT SURE ABOUT THIS
-
-				memalumem(code, machCode,operand + " -> ALU", "value += 1", "ALU -> " + operand );
-
-			}
-
-		}
-		console.log(machCode);
-		updateMachineCode(machCode);
-		return machCode;
+		const opcode = "1111111";
+		const fixedRegBits = "000";
+		function increment(val) { return val + 1; }
+		
+		return AsmToMachForSingleOpInstr(operand, opcode, fixedRegBits, increment, increment);
 	}
 
 	if (instruction === "dec") {
 		const operand = words[1].toLowerCase();
-		let machCode = "";
+		const opcode = "1111111";
+		const fixedRegBits = "001";
+		function decrement(val) { return val - 1; }
 		
-		if (isregister(operand)) {
-			let reg = new Register(operand.toUpperCase());
-			
-			if(is8byteregister(operand))
-			{
-				if(reg.reg_name[1] === "H")
-				{
-					let val = parseInt(reg.getHigherByte(), 2);
-					val--;
-					reg.setHigherByte(val);
-				}
-				else if(reg.reg_name[1] === "L")
-				{
-					let val = parseInt(reg.getLowerByte(), 2);
-					val--;
-					reg.setLowerByte(val);
-				}
-				else{
-					console.log("error")
-				}
-			}
-			else
-			{
-				let val = parseInt(reg.getReg(), 2);
-				val--;
-				reg.setReg(val);
-			}
-			machCode += "1111111"; //opcode
-			if(is8byteregister){
-				machCode += "0";
-			}
-			else
-			{
-				machCode += "1";
-			}
-			machCode += "11"; //mod
-			machCode += "001"; //reg
-			machCode += getRegCode(operand); //r/m
-			alu(code, machCode, operand + " -= 1 ");
-		}
-		
-
-		if (ismemory(operand)) {
-			const memloc = operand.substring(1, operand.length - 1); //remove []
-
-			// Direct memory 
-			if (isnumber(memloc)) {
-				let hexmem = parseInt(memloc, 10).toString(16); // converts int num inside brackets to hex
-				hexmem = "f" + hexmem;
-				console.log(hexmem);
-				let mem = new Register(hexmem.toUpperCase());
-				let val = parseInt(mem.getReg(), 2);
-				val--;
-				mem.setReg(val);
-
-
-				machCode += "1111111"; //opcode
-
-				machCode += "1"; //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
-				machCode += "00"; //mod
-				machCode += "001"; //fixed
-				machCode += "110"; //r/m
-
-				machCode += getLittleEndian(parseInt(memloc).toString(2).padStart(16, "0")); //address
-				memalumem(code, machCode,operand + " -> ALU", "value -= 1", "ALU -> " + operand );
-
-			}
-
-			// memory in register (NEED TO CHECK MACHINE CODE FOR THIS)
-			if (isregister(memloc)) {
-				let reg1 = new Register(memloc.toUpperCase());
-				let hexmem = parseInt(reg1.getReg().padStart(16, "0"), 2).toString(16); //contains hex of reg1 data.
-				hexmem = "f" + hexmem;
-				let mem = new Register(hexmem.toUpperCase());
-				let val = parseInt(mem.getReg(), 2);
-				val--;
-				mem.setReg(val);
-
-
-				machCode += "1111111"; //opcode
-
-				machCode += "1"; //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
-				machCode += "00"; //mod
-				machCode += "001"; //fixed
-				machCode += "111"; //r/m  <- NOT SURE ABOUT THIS
-				memalumem(code, machCode,operand + " -> ALU", "value -= 1", "ALU -> " + operand );
-
-			}
-
-		}
-		console.log(machCode);
-		updateMachineCode(machCode);
-		return machCode;
+		return AsmToMachForSingleOpInstr(operand, opcode, fixedRegBits, decrement, decrement);
 	}
 
 	if (instruction === "neg") {
-		const operand = words[1];
-		let machCode = "";
-
-		if (isregister(operand)) {
-			let reg = new Register(operand.toUpperCase());
-			
-			if(is8byteregister(operand))
-			{
-				if(reg.reg_name[1] === "H")
-				{
-					let val = parseInt(reg.getHigherByte(), 2);
-					val = 256 - val;
-					reg.setHigherByte(val);
-				}
-				else if(reg.reg_name[1] === "L")
-				{
-					let val = parseInt(reg.getLowerByte(), 2);
-					val = 256 - val;
-					reg.setLowerByte(val);
-				}
-				else{
-					console.log("error")
-				}
-			}
-			else
-			{
-				let val = parseInt(reg.getReg(), 2);
-				val = 35536 - val;
-				reg.setReg(val);
-			}
-			
-
-			machCode += "1111011"; //op-code
-			if(is8byteregister){
-				machCode += "0";
-			}
-			else
-			{
-				machCode += "1";
-			}machCode += "11"; //mod
-			machCode += "011"; //fixed
-			machCode += getRegCode(operand); //r/m	
-			alu(code, machCode, operand + " 2s compliment ");		
-		}
-		if (ismemory(operand)) {
-			const memloc = operand.substring(1, operand.length - 1); //remove []
-
-			// Direct memory 
-			if (isnumber(memloc)) {
-				let hexmem = parseInt(memloc, 10).toString(16); // converts int num inside brackets to hex
-				hexmem = "f" + hexmem;
-				console.log(hexmem);
-				let mem = new Register(hexmem.toUpperCase());
-				let val = parseInt(mem.getReg(), 2);
-				val = 65536 - val;
-				let str = val.toString(2);
-				mem.setReg(str);
-
-				machCode += "1111011"; //op-code
-				machCode += "1" //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
-				machCode += "00"; //mod
-				machCode += "011"; //fixed
-				machCode += "110"; //r/m
-				machCode += getLittleEndian(parseInt(memloc).toString(2).padStart(16, "0")); //address
-
-				memalumem(code, machCode,operand + " -> ALU", " 2s compliment ", "ALU -> " + operand );
-
-			}
-
-
-			// memory in register (NEED TO CHECK MACHINE CODE FOR THIS)
-			if (isregister(memloc)) {
-
-				let reg1 = new Register(memloc.toUpperCase());
-				let hexmem = parseInt(reg1.getReg().padStart(16, "0"), 2).toString(16); //contains hex of reg1 data.
-				hexmem = "f" + hexmem;
-				let mem = new Register(hexmem.toUpperCase());
-				let val = parseInt(mem.getReg(), 2);
-				val = 65536 - val;
-				let str = val.toString(2);
-				mem.setReg(str);
-
-
-				machCode += "1111011"; //op-code
-				machCode += "1" //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
-				machCode += "00"; //mod
-				machCode += "011"; //fixed
-				machCode += "111"; //r/m  <- NOT SURE ABOUT THIS
-				memalumem(code, machCode,operand + " -> ALU", " 2s compliment ", "ALU -> " + operand );
-
-			}
-		}
-		updateMachineCode(machCode);
-		return machCode;
+		const operand = words[1].toLowerCase();
+		const opcode = "1111111";
+		const fixedRegBits = "011";
+		function negationByte(val) { return 256 - val; }
+		function negationWord(val) { return 65536 - val; }
+		
+		return AsmToMachForSingleOpInstr(operand, opcode, fixedRegBits, negationWord, negationByte);
 	}
 
 	if (instruction === "not") {
-		const operand = words[1];
-		let machCode = "";
-
-		if (isregister(operand)) {
-			let reg = new Register(operand.toUpperCase());
-			
-			if(is8byteregister(operand))
-			{
-				if(reg.reg_name[1] === "H")
-				{
-					let val = parseInt(reg.getHigherByte(), 2);
-					val = 255 - val;
-					reg.setHigherByte(val);
-				}
-				else if(reg.reg_name[1] === "L")
-				{
-					let val = parseInt(reg.getLowerByte(), 2);
-					val = 255 - val;
-					reg.setLowerByte(val);
-				}
-				else{
-					console.log("error")
-				}
-			}
-			else
-			{
-				let val = parseInt(reg.getReg(), 2);
-				val = 35535 - val;
-				reg.setReg(val);
-			}
-
-			machCode += "1111011"; //op-code
-			if(is8byteregister){
-				machCode += "0";
-			}
-			else
-			{
-				machCode += "1";
-			}
-			machCode += "11"; //mod
-			machCode += "010"; //fixed
-			machCode += getRegCode(operand); //r/m
-			alu(code, machCode, operand + " 2s compliment ");	
-		}
-		if (ismemory(operand)) {
-			const memloc = operand.substring(1, operand.length - 1); //remove []
-
-			// Direct memory 
-			if (isnumber(memloc)) {
-				let hexmem = parseInt(memloc, 10).toString(16); // converts int num inside brackets to hex
-				hexmem = "f" + hexmem;
-				console.log(hexmem);
-				let mem = new Register(hexmem.toUpperCase());
-				let val = parseInt(mem.getReg(), 2);
-				val = 65535 - val;
-				let str = val.toString(2);
-				mem.setReg(str);
-
-				machCode += "1111011"; //op-code
-				machCode += "1" //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
-				machCode += "00"; //mod
-				machCode += "010"; //fixed
-				machCode += "110"; //r/m
-				machCode += getLittleEndian(parseInt(memloc).toString(2).padStart(16, "0")); //address
-				memalumem(code, machCode,operand + " -> ALU", " 1s compliment ", "ALU -> " + operand );
-
-			}
-
-
-			// memory in register (NEED TO CHECK MACHINE CODE FOR THIS)
-			if (isregister(memloc)) {
-
-				let reg1 = new Register(memloc.toUpperCase());
-				let hexmem = parseInt(reg1.getReg().padStart(16, "0"), 2).toString(16); //contains hex of reg1 data.
-				hexmem = "f" + hexmem;
-				let mem = new Register(hexmem.toUpperCase());
-				let val = parseInt(mem.getReg(), 2);
-				val = 65535 - val;
-				let str = val.toString(2);
-				mem.setReg(str);
-
-
-				machCode += "1111011"; //op-code
-				machCode += "1" //w-bit (CHANGE THIS CODE WHEN BYTE MOV FUNCTIONALITY ADDED)
-				machCode += "00"; //mod
-				machCode += "010"; //fixed
-				machCode += "111"; //r/m  <- NOT SURE ABOUT THIS
-				memalumem(code, machCode,operand + " -> ALU", " 1s compliment ", "ALU -> " + operand );
-
-			}
-
-		}
-		updateMachineCode(machCode);
-		return machCode;
+		const operand = words[1].toLowerCase();
+		const opcode = "1111111";
+		const fixedRegBits = "010";
+		function negationByte(val) { return 255 - val; }
+		function negationWord(val) { return 65535 - val; }
 	}
 
 	if (instruction === "and") {
@@ -1291,7 +928,7 @@ function AsmToMchForAddLikeInstr(firstop, secondop, opcode, valOfRegWhenImm, fun
 		
 		if(result === 0) setFlagState("zero_flag", "1");
 		
-		let sixthbit = (sbit ^ dbit).toString(); // SUPER MEGA BRAIN CODE TO FIGURE OUT 6TH BIT
+		let sixthbit = (sbit + dbit).toString(); // SUPER MEGA BRAIN CODE TO FIGURE OUT 6TH BIT
 		machCode = machCode.substr(0,6) + sixthbit + machCode.substr(6);
 		
 		if (is8byteregister(firstop))
@@ -1379,6 +1016,103 @@ function AsmToMchForAddLikeInstr(firstop, secondop, opcode, valOfRegWhenImm, fun
 	return machCode;
 }
 
+// Give binary string for 1st to 7th bit of opcode for second param
+// Give binary string for the "three fixed reg-bits" for third param
+// both functions should be the operation performed on the values of the operand, and should return int
+function AsmToMachForSingleOpInstr(operand, opcode, fixedValOfRegBits, funcwhen16bit, funcwhen8bit) {
+	let machCode = "";
+	let val;
+	
+	if (isregister(operand)) {
+		let reg = new Register(operand.toUpperCase());
+		
+		if(is8byteregister(operand))
+		{
+			if(reg.reg_name[1] === "H")
+			{
+				val = parseInt(reg.getHigherByte(), 2);
+				val = funcwhen8bit(val);
+				reg.setHigherByte(val);
+			}
+			else if(reg.reg_name[1] === "L")
+			{
+				val = parseInt(reg.getLowerByte(), 2);
+				val = funcwhen8bit(val);
+				reg.setLowerByte(val);
+			}
+			else{
+				console.log("error")
+			}
+		}
+		else
+		{
+			val = parseInt(reg.getReg(), 2);
+			val = funcwhen16bit(val);
+			reg.setReg(val);
+		}
+		
+		machCode += opcode; //opcode
+		if(is8byteregister){
+			machCode += "0";
+		}
+		else
+		{
+			machCode += "1";
+		}
+		machCode += "11"; //mod
+		machCode += fixedValOfRegBits; //reg
+		machCode += getRegCode(operand); //r/m
+	}	
+
+	if (ismemory(operand)) {
+		const memloc = operand.substring(1, operand.length - 1); //remove []
+
+		// Direct memory 
+		if (isnumber(memloc)) {
+			let hexmem = parseInt(memloc, 10).toString(16); // converts int num inside brackets to hex
+			hexmem = "f" + hexmem;
+			console.log(hexmem);
+			let mem = new Register(hexmem.toUpperCase());
+			val = parseInt(mem.getReg(), 2);
+			val = funcwhen16bit(val);
+			mem.setReg(val);
+
+
+			machCode += opcode; //opcode
+
+			machCode += "1"; //w-bit
+			machCode += "00"; //mod
+			machCode += fixedValOfRegBits; //fixed
+			machCode += "110"; //r/m
+			machCode += getLittleEndian(parseInt(memloc).toString(2).padStart(16, "0")); //address			
+		}
+
+		// memory in register (NEED TO CHECK MACHINE CODE FOR THIS)
+		if (isregister(memloc)) {
+			let reg1 = new Register(memloc.toUpperCase());
+			let hexmem = parseInt(reg1.getReg().padStart(16, "0"), 2).toString(16); //contains hex of reg1 data.
+			hexmem = "f" + hexmem;
+			let mem = new Register(hexmem.toUpperCase());
+			val = parseInt(mem.getReg(), 2);
+			val = funcwhen16bit(val);
+			mem.setReg(val);
+
+
+			machCode += opcode; //opcode
+			machCode += "1"; //w-bit
+			machCode += "00"; //mod
+			machCode += fixedValOfRegBits; //fixed
+			machCode += "111"; //r/m  <- NOT SURE ABOUT THIS
+		}
+	}
+	
+	if(val === 0) setFlagState("zero_flag", 1);
+	else setFlagState("zero_flag", 0)
+	
+	updateMachineCode(machCode);
+	return machCode;
+}
+
 // Give the all bit of opcode for second param
 // Give bool which is true if jump should happen for third param
 function AsmToMachForConditionalJmpInstr(oprand, opcode, trigger) {
@@ -1396,7 +1130,7 @@ function AsmToMachForConditionalJmpInstr(oprand, opcode, trigger) {
 		machCode += "NAN";
 	}
 	updateMachineCode(machCode);
-	return;
+	return machCode;
 }
 
 // end
