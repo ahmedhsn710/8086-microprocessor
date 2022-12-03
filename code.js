@@ -224,6 +224,14 @@ decode.addEventListener('click', () => {
 })
 
 
+function getFlagState(flagTag) {
+	return document.getElementById(flagTag).innerHTML === "1";
+}
+
+function setFlagState(flagTag, bit) {
+	document.getElementById(flagTag).innerHTML = bit;
+}
+
 // Utility Functions
 function isregister(val) {
 	for (let i = 0; i < regs16.length; i++) {
@@ -288,7 +296,6 @@ function isnumber(val) {
 		start = 1;
 		count++;
 	}
-		
 
 	for (let i = start; i < val.length; i++) {
 		for (let j = 0; j < digits.length; j++) {
@@ -301,8 +308,6 @@ function isnumber(val) {
 	if (val[val.length-1] === 'b' || val[val.length-1] === 'h') {
 		count++;
 	}
-
-
 
 	if (count >= val.length) {
 		return true;
@@ -379,6 +384,7 @@ function AsmToMch(code) {
 
 	const words = code.split(" ");
 	const instruction = words[0].toLowerCase();
+	
 	if (instruction.substring(0, 2) === "//") {
 		console.log("OHH YEAAAA! comment");
 		fetchdecode(code, "");
@@ -443,8 +449,7 @@ function AsmToMch(code) {
 			console.log("OHH YEAAAA! immediate");
 			let reg = new Register(firstop.toUpperCase());
 			secondop = setnumber(secondop);
-			
-			
+
 			if (is8byteregister(firstop)) {
 
 				if (reg.reg_name[1].toLowerCase() === "l") {
@@ -481,6 +486,7 @@ function AsmToMch(code) {
 		if (ismemory(firstop) && isnumber(secondop)) {
 			const memloc = firstop.substring(1, firstop.length - 1); //remove []
 			secondop = setnumber(secondop);
+			
 			// Direct memory
 			if (isnumber(memloc)) {
 				console.log("OHH YEAAAA! MEM DIRECT");
@@ -1143,8 +1149,7 @@ function AsmToMch(code) {
 		return AsmToMchForAddLikeInstr(firstop, secondop, opcode, fixed, adder); 
 	}
 	
-	if (instruction === "sub")
-	{
+	if (instruction === "sub") {
 		const firstop = words[1].substring(0, words[1].length - 1).toLowerCase();
 		const secondop = words[2].toLowerCase();
 		let opcode = "01010";
@@ -1162,8 +1167,8 @@ function AsmToMch(code) {
 		if (jmpline != -1) {
 			lineNo = jmpline;
 
-			machCode += "11101010";
-			machCode += jmpline.toString(2).padStart(16, "0");
+			machCode += "11101010"; // opcode
+			machCode += jmpline.toString(2).padStart(16, "0"); // 16-bit disp
 		}
 		else {
 			console.log("ERROR: jmp called on unrecognized label");
@@ -1172,13 +1177,30 @@ function AsmToMch(code) {
 		updateMachineCode(machCode);
 		return;
 	}
+	
+	if (instruction == "je" || instruction == "jz") {
+		const oprand = words[1].toLowerCase();	
+		const opcode = "01110100"		
+		const trigger = getFlagState("zero_flag");
+
+		return AsmToMachForConditionalJmpInstr(oprand, opcode, trigger);
+	}
+	
+	if (instruction == "jne") {
+		const oprand = words[1].toLowerCase();	
+		const opcode = "01110101"		
+		const trigger = !getFlagState("zero_flag");
+
+		return AsmToMachForConditionalJmpInstr(oprand, opcode, trigger);
+	}
 }
 
-// Give binary string for 2nd to 5th bit of opcode for first param
-// Give binary string for the "three fixed reg-bits" (when immediate data is secOp) for second param
+// Give binary string for 2nd to 5th bit of opcode for third param
+// Give binary string for the "three fixed reg-bits" (when immediate data is secOp) for fourth param
 // Func_w_2params should be the operation performed on the values of both operands, should return int
 function AsmToMchForAddLikeInstr(firstop, secondop, opcode, valOfRegWhenImm, func_w_2params) {
 	let machCode = "";
+	let result;
 	if (isregister(firstop)) // First operand is a register. This has three cases.
 	{
 		let reg1 = new Register(firstop.toUpperCase());
@@ -1265,7 +1287,9 @@ function AsmToMchForAddLikeInstr(firstop, secondop, opcode, valOfRegWhenImm, fun
 			val2 = parseInt(mem.getReg(), 2);
 		}
 		
-		let result = func_w_2params(val1, val2);
+		result = func_w_2params(val1, val2);
+		
+		if(result === 0) setFlagState("zero_flag", "1");
 		
 		let sixthbit = (sbit ^ dbit).toString(); // SUPER MEGA BRAIN CODE TO FIGURE OUT 6TH BIT
 		machCode = machCode.substr(0,6) + sixthbit + machCode.substr(6);
@@ -1346,9 +1370,33 @@ function AsmToMchForAddLikeInstr(firstop, secondop, opcode, valOfRegWhenImm, fun
 			machCode += rmCode; // r/m
 			machCode += getLittleEndian(parseInt(secondop).toString(2).padStart(16, "0")); //data
 		}
-		mem.setReg(func_w_2params(val1, val2));
+		result = func_w_2params(val1, val2);
+		if (result === 0) setFlagState("zero_flag", "1");
+		mem.setReg(result);
 	}
 	console.log(machCode);
 	updateMachineCode(machCode);
+	return machCode;
+}
+
+// Give the all bit of opcode for second param
+// Give bool which is true if jump should happen for third param
+function AsmToMachForConditionalJmpInstr(oprand, opcode, trigger) {
+	let machCode = "";
+		
+	let jmpline = getLabelLine(oprand);
+	if (jmpline != -1) {
+		if (trigger) lineNo = jmpline;
+
+		machCode += opcode; // opcode
+		machCode += jmpline.toString(2).padStart(8, "0"); // 8-bit disp
+	}
+	else {
+		console.log("ERROR: jmp called on unrecognized label");
+		machCode += "NAN";
+	}
+	updateMachineCode(machCode);
 	return;
 }
+
+// end
