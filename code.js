@@ -4,16 +4,15 @@ let decode = document.querySelector("#decode-button");
 let animate = document.querySelector("#animation-button");
 let lineNo = 0;
 let digits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];
+const ClockTimePeriod = 1000;
 
 // A array of pairs where first item is regname and second item is regcode
 let regs16 = [["ax", "000"], ["bx", "011"], ["cx", "001"], ["dx", "010"],
 ["sp", "100"], ["bp", "101"], ["si", "110"], ["di", "111"]];
 
-
 // An array of pairs where first item is label name and second item is line no.
 let labels = [];
 	
-
 let regs8 = [["ah", "000"], ["al", "000"], ["bh", "011"], ["bl", "011"],
 ["ch", "001"], ["cl", "001"], ["dh", "010"], ["dl", "010"]];
 
@@ -22,13 +21,13 @@ let a = ace.edit(editor, {
 	mode: "ace/mode/assembly_x86",
 });
 
+// Animation Code
 
 let c = document.getElementById("myCanvas");
 let ctx = c.getContext("2d");
 ctx.lineWidth = "3";
 ctx.strokeStyle = "#061731";
 draw8086();
-
 
 function draw8086(){
 	drawBox("BIU", "", 50, 50);
@@ -58,8 +57,6 @@ function drawBox(name, inst, x, y, clr = '#061731'){
 	ctx.fillStyle = "white";
 	ctx.textAlign = "center";
 	ctx.fillText(name, x+50, y+20);
-	console.log(inst);
-	console.log(inst.length);
 	if(inst.length > 16){
 		ctx.fillText(inst.substring(0, 16), x+50, y+40);
 		ctx.fillText(inst.substring(16), x+50, y+60);
@@ -83,12 +80,12 @@ function changeColor(name, inst, x, y){
 }
 
 async function fetchdecode(inst, machcode){
-	await sleep(1000);
+	await sleep(ClockTimePeriod);
 	changeColor("BIU", inst, 50, 50);
-	await sleep(2000);
+	await sleep(ClockTimePeriod);
 	drawBox("BIU", "", 50, 50);
 	changeColor("Decoder", machcode, 250, 50);
-	await sleep(2000);
+	await sleep(ClockTimePeriod);
 	drawBox("Decoder", "", 250, 50);
 	
 }
@@ -96,49 +93,57 @@ async function fetchdecode(inst, machcode){
 async function alu(inst, machcode, process){
 	await fetchdecode(inst, machcode)
 	changeColor("ALU", process, 250, 250);
-	await sleep(2000);
+	await sleep(ClockTimePeriod);
 	drawBox("ALU", "", 250, 250);	
 }
 
 async function animatemem(inst, machcode, mem){
 	await fetchdecode(inst, machcode);
 	changeColor("Memory", mem, 50, 250);
-	await sleep(2000);
+	await sleep(ClockTimePeriod);
 	drawBox("Memory", "", 50, 250);	
 }
 
 async function memalumem(inst, machcode, mem1, process, mem2){
 	await fetchdecode(inst, machcode);
 	changeColor("Memory", mem1, 50, 250);
-	await sleep(2000);
+	await sleep(ClockTimePeriod);
 	drawBox("Memory", "", 50, 250);	
 	changeColor("ALU", process, 250, 250);
-	await sleep(2000);
+	await sleep(ClockTimePeriod);
 	drawBox("ALU", "", 250, 250);
 	changeColor("Memory", mem2, 50, 250);
-	await sleep(2000);
+	await sleep(ClockTimePeriod);
 	drawBox("Memory", "", 50, 250);	
 }
 
 async function memalu(inst, machcode, mem, process){
 	await fetchdecode(inst, machcode);
 	changeColor("Memory", mem, 50, 250);
-	await sleep(2000);
+	await sleep(ClockTimePeriod);
 	drawBox("Memory", "", 50, 250);	
 	changeColor("ALU", process, 250, 250);
-	await sleep(2000);
+	await sleep(ClockTimePeriod);
 	drawBox("ALU", "", 250, 250);
 }
 
 async function alumem(inst, machcode, process, mem){
 	await fetchdecode(inst, machcode);
 	changeColor("ALU", process, 250, 250);
-	await sleep(2000);
+	await sleep(ClockTimePeriod);
 	drawBox("ALU", "", 250, 250);
 	changeColor("Memory", mem, 50, 250);
-	await sleep(2000);
+	await sleep(ClockTimePeriod);
 	drawBox("Memory", "", 50, 250);	
 }
+
+async function animate_controlunit(inst, machcode, process){
+	await fetchdecode(inst, machcode)
+	changeColor("Control Unit", process, 150, 150);
+	await sleep(ClockTimePeriod);
+	drawBox("Control Unit", "", 150, 150);	
+}
+
 
 // Generic R/M class
 class Register {
@@ -221,7 +226,7 @@ run.addEventListener('click', () => {
 	{
 		const words = code[i].split(" ");
 		const fword = words[0].toLowerCase();
-		if (fword[0, 2] != "//" && fword[fword.length - 1] == ":") // is not comment and is label
+		if (fword[0] != ";" && fword[fword.length - 1] === ":") // is not comment and is label
 		{
 			labels.push([fword.substr(0, fword.length - 1).toLowerCase(), i]);
 		}
@@ -235,13 +240,21 @@ run.addEventListener('click', () => {
 decode.addEventListener('click', () => {
 	if (lineNo < code.length) 
 	{
-		console.log(code[lineNo]);
-		document.getElementById("CurrInst").innerText = code[lineNo];
-		AsmToMch(code[lineNo]);
-		lineNo++;
+		let fword = code[lineNo].split(" ")[0].toLowerCase();
+		while (fword[0] === ";" || getLabelLine(fword.substr(0, fword.length - 1)) != -1) { // Skipping comments and labels
+			lineNo++;
+			fword = code[lineNo].split(" ")[0].toLowerCase();
+		}
+		if (lineNo < code.length)
+		{
+			AsmToMch(code[lineNo]);
+			lineNo++;
+		}
 	}
 })
 
+
+// Utility Functions
 
 function getFlagState(flagTag) {
 	return document.getElementById(flagTag).innerHTML === "1";
@@ -251,7 +264,6 @@ function setFlagState(flagTag, bit) {
 	document.getElementById(flagTag).innerHTML = bit;
 }
 
-// Utility Functions
 function isregister(val) {
 	for (let i = 0; i < regs16.length; i++) {
 		if (val === regs16[i][0] || val === regs8[i][0]) {
@@ -381,7 +393,6 @@ function ishex(str) {
 
 }
 
-// Updates Machine code
 function updateMachineCode(binstr) {
 	for (let i = 8; i < binstr.length; i += 8) // Loop through and add " " after every byte
 	{
@@ -396,29 +407,23 @@ function updateMachineCode(binstr) {
 	document.getElementById("MachCode").innerText = binstr;
 }
 
-// Main Conversion Function
 
+// Main Conversion Function
 function AsmToMch(code) {
 	console.log(code);
 
 	const words = code.split(" ");
 	const instruction = words[0].toLowerCase();
 	
-	if (instruction.substring(0, 2) === "//") {
-		console.log("OHH YEAAAA! comment");
-		fetchdecode(code, "");
-		return;
-	}
-
+	document.getElementById("CurrInst").innerText = code;
+	
 	if (instruction === "mov") {
 		const firstop = words[1].substring(0, words[1].length - 1).toLowerCase();
 		let secondop = words[2].toLowerCase();
 		let machCode = "";
-		console.log("OHH YEAAAA! mov");
 
 		// Register to Register 
 		if (isregister(firstop) && isregister(secondop)) {
-			console.log("OHH YEAAAA! direct");
 			let reg1 = new Register(firstop.toUpperCase());
 			let reg2 = new Register(secondop.toUpperCase());
 
@@ -465,7 +470,6 @@ function AsmToMch(code) {
 
 		// Immidate data to register
 		if (isregister(firstop) && isnumber(secondop)) {
-			console.log("OHH YEAAAA! immediate");
 			let reg = new Register(firstop.toUpperCase());
 			secondop = setnumber(secondop);
 
@@ -508,7 +512,6 @@ function AsmToMch(code) {
 			
 			// Direct memory
 			if (isnumber(memloc)) {
-				console.log("OHH YEAAAA! MEM DIRECT");
 				let hexmem = parseInt(memloc, 10).toString(16); // converts int num inside brackets to hex
 				hexmem = "f" + hexmem;
 
@@ -521,13 +524,13 @@ function AsmToMch(code) {
 				machCode += "000"; //fixed
 				machCode += "110"; //r/m
 				machCode += getLittleEndian(parseInt(memloc).toString(2).padStart(16, "0")); //address
+				machCode += getLittleEndian(parseInt(secondop).toString(2).padStart(16, "0")); //data
 				
 				animatemem(code, machCode, secondop + " -> " + firstop);
 			}
 
 			// memory in register (NEED TO CHECK MACHINE CODE FOR THIS)
 			if (isregister(memloc)) {
-				console.log("OHH YEAAAA! MEM INDIRECT");
 				let reg1 = new Register(memloc.toUpperCase());
 				let hexmem = parseInt(reg1.getReg().padStart(16, "0"), 2).toString(16); //contains hex of reg1 data.
 				hexmem = "f" + hexmem;
@@ -539,6 +542,7 @@ function AsmToMch(code) {
 				machCode += "00"; //mod
 				machCode += "000"; //fixed
 				machCode += "111"; //r/m <- NOT SURE ABOUT THIS
+				machCode += getLittleEndian(parseInt(secondop).toString(2).padStart(16, "0")); //data
 
 				animatemem(code, machCode, secondop + " -> " + firstop);
 			}
@@ -552,7 +556,6 @@ function AsmToMch(code) {
 
 			// Direct memory
 			if (isnumber(memloc)) {
-				console.log("OHH YEAAAA! REG DIRECT");
 				let hexmem = parseInt(memloc, 10).toString(16); // converts int num inside brackets to hex
 				hexmem = "f" + hexmem;
 
@@ -595,7 +598,6 @@ function AsmToMch(code) {
 
 			// Memory location in register (NEED TO CHECK MACHINE CODE FOR THIS)
 			if (isregister(memloc)) {
-				console.log("OHH YEAAAA! REG INDIRECT");
 				let reg2 = new Register(memloc.toUpperCase());
 				let hexmem = parseInt(reg2.getReg().padStart(16, "0"), 2).toString(16); //contains hex of reg2 data.
 				hexmem = "f" + hexmem;
@@ -642,10 +644,8 @@ function AsmToMch(code) {
 
 			// Direct memory 
 			if (isnumber(memloc)) {
-				console.log("OHH YEAAAA! REG DIRECT");
 				let hexmem = parseInt(memloc, 10).toString(16); // converts int num inside brackets to hex
 				hexmem = "f" + hexmem;
-				console.log(hexmem);
 				let mem = new Register(hexmem.toUpperCase());
 				if (is8byteregister(secondop)) {
 
@@ -684,7 +684,6 @@ function AsmToMch(code) {
 
 			// memory in register (NEED TO CHECK MACHINE CODE FOR THIS)
 			if (isregister(memloc)) {
-				console.log("OHH YEAAAA! REG INDIRECT");
 				let reg1 = new Register(memloc.toUpperCase());
 				let hexmem = parseInt(reg1.getReg().padStart(16, "0"), 2).toString(16); //contains hex of reg1 data.
 				hexmem = "f" + hexmem;
@@ -723,11 +722,8 @@ function AsmToMch(code) {
 				animatemem(code, machCode, secondop + " -> " + firstop);
 			}
 		}
-
-		console.log(machCode);
 		updateMachineCode(machCode);
-
-		return machCode;
+		return;
 	}
 	
 	if (instruction === "xchg") {
@@ -895,7 +891,9 @@ function AsmToMch(code) {
 		const opcode = "1111111";
 		const fixedRegBits = "000";
 		function increment(val) { return val + 1; }
+		
 		let machcode = AsmToMachForSingleOpInstr(operand, opcode, fixedRegBits, increment, increment);
+		
 		if(isregister(operand)) alu(code, machcode, operand + " += 1 ");
 		else if (ismemory(operand)) memalumem(code, machcode,operand + " -> ALU", "value += 1", "ALU -> " + operand );
 		return ;
@@ -906,7 +904,9 @@ function AsmToMch(code) {
 		const opcode = "1111111";
 		const fixedRegBits = "001";
 		function decrement(val) { return val - 1; }
+		
 		let machcode = AsmToMachForSingleOpInstr(operand, opcode, fixedRegBits, decrement, decrement);
+		
 		if(isregister(operand)) alu(code, machcode, operand + " -= 1 ");
 		else if (ismemory(operand)) memalumem(code, machcode,operand + " -> ALU", "value -= 1", "ALU -> " + operand );
 		return ;
@@ -918,10 +918,11 @@ function AsmToMch(code) {
 		const fixedRegBits = "011";
 		function negationByte(val) { return 256 - val; }
 		function negationWord(val) { return 65536 - val; }
+		
 		let machcode = AsmToMachForSingleOpInstr(operand, opcode, fixedRegBits, negationWord, negationByte);
+		
 		if(isregister(operand)) alu(code, machcode, operand + " 2s comlpement");
 		else if (ismemory(operand)) memalumem(code, machcode,operand + " -> ALU", operand + " 2s comlpement", "ALU -> " + operand );
-		
 		return ;
 	}
 
@@ -931,7 +932,9 @@ function AsmToMch(code) {
 		const fixedRegBits = "010";
 		function negationByte(val) { return 255 - val; }
 		function negationWord(val) { return 65535 - val; }
+		
 		let machcode = AsmToMachForSingleOpInstr(operand, opcode, fixedRegBits, negationWord, negationByte);
+		
 		if(isregister(operand)) alu(code, machcode, operand +" 1s complement");
 		else if (ismemory(operand)) memalumem(code, machcode,operand + " -> ALU", operand +" 1s complement", "ALU -> " + operand );
 		return;
@@ -943,7 +946,9 @@ function AsmToMch(code) {
 		let opcode = "00100";
 		let fixed = "100"
 		function and_er(val1, val2) { return val1 & val2; }
+		
 		let machcode =  AsmToMchForAddLikeInstr(firstop, secondop, opcode, fixed, and_er);
+		
 		if(isregister(firstop)){
 			if(ismemory(secondop)) memalu(code, machcode, secondop+" -> ALU", firstop + " && " + secondop);
 			else alu(code, machcode, firstop + " && " + secondop)
@@ -960,7 +965,9 @@ function AsmToMch(code) {
 		let opcode = "00010";
 		let fixed = "001"
 		function or_er(val1, val2) { return val1 | val2; }
+		
 		let machcode =  AsmToMchForAddLikeInstr(firstop, secondop, opcode, fixed, or_er);
+		
 		if(isregister(firstop)){
 			if(ismemory(secondop)) memalu(code, machcode, secondop+" -> ALU", firstop + " || " + secondop);
 			else alu(code, machcode, firstop + " || " + secondop)
@@ -978,7 +985,9 @@ function AsmToMch(code) {
 		let opcode = "01100";
 		let fixed = "110"
 		function xor_er(val1, val2) { return val1 ^ val2; }
+		
 		let machcode = AsmToMchForAddLikeInstr(firstop, secondop, opcode, fixed, xor_er);
+		
 		if(isregister(firstop)){
 			if(ismemory(secondop)) memalu(code, machcode, secondop+" -> ALU", firstop + " xor " + secondop);
 			else alu(code, machcode, firstop + " xor " + secondop)
@@ -996,7 +1005,9 @@ function AsmToMch(code) {
 		let opcode = "00000";
 		let fixed = "000"
 		function adder(val1, val2) { return val1 + val2; }
+		
 		let machcode = AsmToMchForAddLikeInstr(firstop, secondop, opcode, fixed, adder);
+		
 		if(isregister(firstop)){
 			if(ismemory(secondop)) memalu(code, machcode, secondop+" -> ALU", firstop + " + " + secondop);
 			else alu(code, machcode, firstop + " + " + secondop)
@@ -1013,7 +1024,9 @@ function AsmToMch(code) {
 		let opcode = "01010";
 		let fixed = "101"
 		function subtracter(val1, val2) { return val1 - val2; }
+		
 		let machcode = AsmToMchForAddLikeInstr(firstop, secondop, opcode, fixed, subtracter);
+		
 		if(isregister(firstop)){
 			if(ismemory(secondop)) memalu(code, machcode, secondop+" -> ALU", firstop + " - " + secondop);
 			else alu(code, machcode, firstop + " - " + secondop)
@@ -1021,7 +1034,6 @@ function AsmToMch(code) {
 		else if(ismemory(firstop)){
 			memalumem(code, machcode, firstop + " -> ALU",firstop + " - " + secondop, "ALU -> "+ firstop )
 		}
-		
 		return ; 
 	}
 		
@@ -1052,7 +1064,7 @@ function AsmToMch(code) {
 		return;
 	}
 	
-	if (instruction == "jmp") {
+	if (instruction === "jmp") {
 		const oprand = words[1].toLowerCase();
 		let machCode = "";
 
@@ -1062,6 +1074,8 @@ function AsmToMch(code) {
 
 			machCode += "11101010"; // opcode
 			machCode += jmpline.toString(2).padStart(16, "0"); // 16-bit disp
+			
+			animate_controlunit(code, machCode, "IP =" + lineNo);
 		}
 		else {
 			console.log("ERROR: jmp called on unrecognized label");
@@ -1071,23 +1085,31 @@ function AsmToMch(code) {
 		return;
 	}
 	
-	if (instruction == "je" || instruction == "jz") {
+	if (instruction === "je" || instruction === "jz") {
 		const oprand = words[1].toLowerCase();	
 		const opcode = "01110100"		
 		const trigger = getFlagState("zero_flag");
 
-		return AsmToMachForConditionalJmpInstr(oprand, opcode, trigger);
+		let machCode = AsmToMachForConditionalJmpInstr(oprand, opcode, trigger);
+		
+		if (trigger) animate_controlunit(code, machCode, "IP = " + lineNo);
+		else animate_controlunit(code, machCode, "no jmp");
+		return;
 	}
 	
-	if (instruction == "jne") {
+	if (instruction === "jne") {
 		const oprand = words[1].toLowerCase();	
 		const opcode = "01110101"		
 		const trigger = !getFlagState("zero_flag");
 
-		return AsmToMachForConditionalJmpInstr(oprand, opcode, trigger);
+		let machCode = AsmToMachForConditionalJmpInstr(oprand, opcode, trigger);
+		
+		if (trigger) animate_controlunit(code, machCode, "IP = " + lineNo);
+		else animate_controlunit(code, machCode, "no jmp");
+		return;
 	}
 	
-	if (instruction == "nop") {
+	if (instruction === "nop") {
 		let machCode = "10000111" //opcode + w
 		machCode += "11000000" // mod + reg + r/m
 		
