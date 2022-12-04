@@ -1,4 +1,4 @@
-import {mov, xchg, AsmToMachForConditionalJmpInstr, AsmToMachForSingleOpInstr, AsmToMchForAddLikeInstr, getLabelLine, isregister, ismemory, getFlagState, setFlagState, alu, memalu, memalumem, animate_controlunit, draw8086} from './asmtomach.js'
+import {mov, xchg, AsmToMachForSingleOpInstr, AsmToMchForAddLikeInstr, getLabelLine, isregister, ismemory, getFlagState, setFlagState, alu, memalu, memalumem, animate_controlunit, draw8086} from './asmtomach.js'
 
 
 let editor = document.querySelector("#editor");
@@ -67,8 +67,6 @@ decode.addEventListener('click', () => {
 	}
 })
 
-
-// Utility Functions
 
 
 function updateMachineCode(binstr) {
@@ -341,5 +339,26 @@ function AsmToMch(code) {
 	
 }
 
-export {updateMachineCode, ctx, labels, code}
+// Give the all bit of opcode for second param
+// Give bool which is true if jump should happen for third param
+function AsmToMachForConditionalJmpInstr(oprand, opcode, trigger) {
+	let machCode = "";
+		
+	let jmpline = getLabelLine(oprand);
+	if (jmpline != -1) {
+		if (trigger) lineNo = jmpline;
+
+		machCode += opcode; // opcode
+		machCode += jmpline.toString(2).padStart(8, "0"); // 8-bit disp
+	}
+	else {
+		console.log("ERROR: jmp called on unrecognized label");
+		machCode += "NAN";
+	}
+	updateMachineCode(machCode);
+	return machCode;
+}
+
+
+export {updateMachineCode, ctx, labels, lineNo}
 

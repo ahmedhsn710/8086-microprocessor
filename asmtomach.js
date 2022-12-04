@@ -1,4 +1,4 @@
-import {updateMachineCode, ctx, labels, code} from './code.js'
+import {updateMachineCode, ctx, labels} from './code.js'
 
 let digits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];
 
@@ -322,7 +322,7 @@ async function animate_controlunit(inst, machcode, process){
 
 
 
-function mov(words){
+function mov(code, words){
 	const firstop = words[1].substring(0, words[1].length - 1).toLowerCase();
 	let secondop = words[2].toLowerCase();
 	let machCode = "";
@@ -631,7 +631,7 @@ function mov(words){
 	return machCode;
 }
 
-function xchg(words){
+function xchg(code, words){
 	const firstop = words[1].substring(0, words[1].length - 1).toLowerCase();
 	const secondop = words[2].toLowerCase();
 	let machCode = "";
@@ -1071,24 +1071,5 @@ function AsmToMachForSingleOpInstr(operand, opcode, fixedValOfRegBits, funcwhen1
 	return machCode;
 }
 
-// Give the all bit of opcode for second param
-// Give bool which is true if jump should happen for third param
-function AsmToMachForConditionalJmpInstr(oprand, opcode, trigger) {
-	let machCode = "";
-		
-	let jmpline = getLabelLine(oprand);
-	if (jmpline != -1) {
-		if (trigger) lineNo = jmpline;
 
-		machCode += opcode; // opcode
-		machCode += jmpline.toString(2).padStart(8, "0"); // 8-bit disp
-	}
-	else {
-		console.log("ERROR: jmp called on unrecognized label");
-		machCode += "NAN";
-	}
-	updateMachineCode(machCode);
-	return machCode;
-}
-
-export {mov, xchg, AsmToMachForConditionalJmpInstr, AsmToMachForSingleOpInstr, AsmToMchForAddLikeInstr, getLabelLine, isregister, ismemory, getFlagState, setFlagState, alu, memalu, memalumem, animate_controlunit, draw8086}
+export {mov, xchg, AsmToMachForSingleOpInstr, AsmToMchForAddLikeInstr, getLabelLine, isregister, ismemory, getFlagState, setFlagState, alu, memalu, memalumem, animate_controlunit, draw8086}
