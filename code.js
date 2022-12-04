@@ -4,22 +4,18 @@ import {mov, xchg, AsmToMachForSingleOpInstr, AsmToMchForAddLikeInstr, getLabelL
 let editor = document.querySelector("#editor");
 let run = document.querySelector("#run-button");
 let decode = document.querySelector("#decode-button");
+let error = document.querySelector("#error")
 let lineNo = 0;
 let code = "";
 
-
-
 // An array of pairs where first item is label name and second item is line no.
 let labels = [];
-	
-
 
 let a = ace.edit(editor, {
 	theme: "ace/theme/cobalt",
 	mode: "ace/mode/assembly_x86",
 });
 
-// Animation Code
 
 let c = document.getElementById("myCanvas");
 let ctx = c.getContext("2d");
@@ -67,6 +63,11 @@ decode.addEventListener('click', () => {
 	}
 })
 
+function errorMessage(msg) {
+	error.textContent = msg
+	error.style.color = "red"
+
+}
 
 
 function updateMachineCode(binstr) {
@@ -93,18 +94,18 @@ function AsmToMch(code) {
 	document.getElementById("CurrInst").innerText = code;
 	
 	if (instruction === "mov") {
-		let machCode = mov(code, words)
+		let machCode = mov(code, words);
 		updateMachineCode(machCode);
 		return;
 	}
 	
-	if (instruction === "xchg") {
+	else if (instruction === "xchg") {
 		let machCode = xchg(code, words);
 		updateMachineCode(machCode);
 		return;
 	}
 	
-	if (instruction === "inc") {
+	else if (instruction === "inc") {
 		const operand = words[1].toLowerCase();
 		const opcode = "1111111";
 		const fixedRegBits = "000";
@@ -117,7 +118,7 @@ function AsmToMch(code) {
 		return ;
 	}
 
-	if (instruction === "dec") {
+	else if (instruction === "dec") {
 		const operand = words[1].toLowerCase();
 		const opcode = "1111111";
 		const fixedRegBits = "001";
@@ -130,7 +131,7 @@ function AsmToMch(code) {
 		return ;
 	}
 
-	if (instruction === "neg") {
+	else if (instruction === "neg") {
 		const operand = words[1].toLowerCase();
 		const opcode = "1111111";
 		const fixedRegBits = "011";
@@ -144,7 +145,7 @@ function AsmToMch(code) {
 		return ;
 	}
 
-	if (instruction === "not") {
+	else if (instruction === "not") {
 		const operand = words[1].toLowerCase();
 		const opcode = "1111111";
 		const fixedRegBits = "010";
@@ -158,7 +159,7 @@ function AsmToMch(code) {
 		return;
 	}
 
-	if (instruction === "and") {
+	else if (instruction === "and") {
 		const firstop = words[1].substring(0, words[1].length - 1).toLowerCase();
 		const secondop = words[2].toLowerCase();
 		let opcode = "00100";
@@ -177,7 +178,7 @@ function AsmToMch(code) {
 		return;
 	}
 	
-	if (instruction === "or") {
+	else if (instruction === "or") {
 		const firstop = words[1].substring(0, words[1].length - 1).toLowerCase();
 		const secondop = words[2].toLowerCase();
 		let opcode = "00010";
@@ -197,7 +198,7 @@ function AsmToMch(code) {
 		return;
 	}
 	
-	if (instruction === "xor") {
+	else if (instruction === "xor") {
 		const firstop = words[1].substring(0, words[1].length - 1).toLowerCase();
 		const secondop = words[2].toLowerCase();
 		let opcode = "01100";
@@ -217,7 +218,7 @@ function AsmToMch(code) {
 		return ; 
 	}
 	
-	if (instruction === "add") {
+	else if (instruction === "add") {
 		const firstop = words[1].substring(0, words[1].length - 1).toLowerCase();
 		const secondop = words[2].toLowerCase();
 		let opcode = "00000";
@@ -236,7 +237,7 @@ function AsmToMch(code) {
 		return ; 
 	}
 	
-	if (instruction === "sub") {
+	else if (instruction === "sub") {
 		const firstop = words[1].substring(0, words[1].length - 1).toLowerCase();
 		const secondop = words[2].toLowerCase();
 		let opcode = "01010";
@@ -255,7 +256,7 @@ function AsmToMch(code) {
 		return ; 
 	}
 		
-	if (instruction === "cmp") {
+	else if (instruction === "cmp") {
 		const firstop = words[1].substring(0, words[1].length - 1).toLowerCase();
 		const secondop = words[2].toLowerCase();
 		let opcode = "01110";
@@ -282,7 +283,7 @@ function AsmToMch(code) {
 		return;
 	}
 	
-	if (instruction === "jmp") {
+	else if (instruction === "jmp") {
 		const oprand = words[1].toLowerCase();
 		let machCode = "";
 		console.log(getLabelLine(oprand))
@@ -303,7 +304,7 @@ function AsmToMch(code) {
 		return;
 	}
 	
-	if (instruction === "je" || instruction === "jz") {
+	else if (instruction === "je" || instruction === "jz") {
 		const oprand = words[1].toLowerCase();	
 		const opcode = "01110100"		
 		const trigger = getFlagState("zero_flag");
@@ -315,7 +316,7 @@ function AsmToMch(code) {
 		return;
 	}
 	
-	if (instruction === "jne") {
+	else if (instruction === "jne") {
 		const oprand = words[1].toLowerCase();	
 		const opcode = "01110101"		
 		const trigger = !getFlagState("zero_flag");
@@ -327,16 +328,18 @@ function AsmToMch(code) {
 		return;
 	}
 	
-	if (instruction === "nop") {
+	else if (instruction === "nop") {
 		let machCode = "10000111" //opcode + w
 		machCode += "11000000" // mod + reg + r/m
 		
 		alu(code, machCode, "ax <-> ax");
-		
 		updateMachineCode(machCode);
 		return;
 	}
-	
+
+	else{
+		errorMessage("Unrecognized instruction");
+	}
 }
 
 // Give the all bit of opcode for second param
@@ -351,14 +354,14 @@ function AsmToMachForConditionalJmpInstr(oprand, opcode, trigger) {
 		machCode += opcode; // opcode
 		machCode += jmpline.toString(2).padStart(8, "0"); // 8-bit disp
 	}
-	else {
-		console.log("ERROR: jmp called on unrecognized label");
-		machCode += "NAN";
+	else{
+		errorMessage("ERROR: jmp called on unrecognized label");
+		return;
 	}
 	updateMachineCode(machCode);
 	return machCode;
 }
 
 
-export {updateMachineCode, ctx, labels, lineNo}
+export {updateMachineCode, ctx, labels, lineNo, errorMessage}
 

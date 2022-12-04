@@ -1,4 +1,4 @@
-import {updateMachineCode, ctx, labels} from './code.js'
+import {updateMachineCode, ctx, labels, errorMessage} from './code.js'
 
 let digits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];
 
@@ -628,6 +628,9 @@ function mov(code, words){
 		}
 	}
 
+	else{
+		errorMessage("Invalid mode");
+	}
 	return machCode;
 }
 
@@ -787,6 +790,9 @@ function xchg(code, words){
 		mem.setReg(val2);
 		memalumem(code, machCode, firstop + " -> ALU", firstop + "<->" + secondop, "ALU -> "+ firstop );
 	}
+	else{
+		errorMessage("Invalid mode");
+	}
 	return machCode;
 }
 
@@ -902,7 +908,7 @@ function AsmToMchForAddLikeInstr(firstop, secondop, opcode, valOfRegWhenImm, fun
 			machCode = machCode.substr(0,7) + "1" + machCode.substr(7);
 		}
 	}
-	if (ismemory(firstop))//First operand is memory. This has two cases.
+	else if (ismemory(firstop))//First operand is memory. This has two cases.
 	{
 		const memloc = firstop.substring(1, firstop.length - 1); //remove []
 		let hexmem;
@@ -968,6 +974,10 @@ function AsmToMchForAddLikeInstr(firstop, secondop, opcode, valOfRegWhenImm, fun
 		
 		mem.setReg(result);
 	}
+	else{
+		errorMessage("Invalid mode");
+		return;
+	}
 	updateMachineCode(machCode);
 	if (result === 0) setFlagState("zero_flag", "1");
 	else setFlagState("zero_flag", "0");
@@ -1022,7 +1032,7 @@ function AsmToMachForSingleOpInstr(operand, opcode, fixedValOfRegBits, funcwhen1
 		machCode += getRegCode(operand); //r/m
 	}	
 
-	if (ismemory(operand)) {
+	else if (ismemory(operand)) {
 		const memloc = operand.substring(1, operand.length - 1); //remove []
 
 		// Direct memory 
@@ -1064,6 +1074,10 @@ function AsmToMachForSingleOpInstr(operand, opcode, fixedValOfRegBits, funcwhen1
 		}
 	}
 	
+	else{
+		errorMessage("Invalid mode");
+		return;
+	}
 	if(val === 0) setFlagState("zero_flag", 1);
 	else setFlagState("zero_flag", 0)
 	
