@@ -87,7 +87,7 @@ function updateMachineCode(binstr) {
 // Main Conversion Function
 function AsmToMch(code) {
 	console.log(code);
-
+	errorMessage("");
 	const words = code.split(" ");
 	const instruction = words[0].toLowerCase();
 	
