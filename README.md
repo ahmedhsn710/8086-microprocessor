@@ -1,6 +1,9 @@
 # 8086 Simulator
 A web based graphical user interface which simulates 8088 microprocessors working.
 
+# Live Project Demo
+ https://ahmedhsn710.github.io/8086-microprocessor/
+
 ## MODEL DESIGN DETAILS
 We have designed an 8086 micro-processor model using JavaScript to code the whole model. To create the front-end and visuals of our design, HTML and CSS are used.  A text editor API is used through which users will enter their instructions and the instructions are compiled and run line-by-line through the buttons provided. Furthermore, for simplicity, only 8 registers and 16 memory locations have been added that are shown on the front-end to the user. The front-end also displays the machine code, current instruction running, and block diagram of the instruction cycles the instruction is passing through. Five instruction cycles have been added that include, BIU, Decode, ALU, Memory and Control Unit.  To help the users better understand which instruction cycles are used in each instruction, we have added animations to the block diagram. Whenever an instruction passes through one of the five cycles, the block of the particular cycle is highlighted by color and the instruction is also displayed within that block with a certain delay between each cycle. This wraps up the design features of the front-end that we designed to showcase our model of 8086. Moreover, we have added the feature to only allow 8-bit value in an 8-bit register and 16-bit value in 16-bit register i.e. bit compatibility feature.
 
