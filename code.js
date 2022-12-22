@@ -38,7 +38,7 @@ run.addEventListener('click', () => {
 		const fword = words[0].toLowerCase();
 		if (fword[0] != ";" && fword[fword.length - 1] === ":") // is not comment and is label
 		{
-			labels.push([fword.substr(0, fword.length - 1).toLowerCase(), i]);
+			labels.push([fword.substring(0, fword.length - 1).toLowerCase(), i]);
 		}
 	}
 	console.log(code);
@@ -51,7 +51,7 @@ decode.addEventListener('click', () => {
 	if (lineNo < code.length) 
 	{
 		let fword = code[lineNo].split(" ")[0].toLowerCase();
-		while (fword[0] === ";" || getLabelLine(labels, fword.substr(0, fword.length - 1)) != -1) { // Skipping comments and labels
+		while (fword[0] === ";" || getLabelLine(fword.substring(0, fword.length - 1)) != -1) { // Skipping comments and labels
 			lineNo++;
 			fword = code[lineNo].split(" ")[0].toLowerCase();
 		}
@@ -86,7 +86,6 @@ function updateMachineCode(binstr) {
 
 // Main Conversion Function
 function AsmToMch(code) {
-	console.log(code);
 	errorMessage("");
 	const words = code.split(" ");
 	const instruction = words[0].toLowerCase();
