@@ -46,7 +46,23 @@
       <div class="lg:w-4/5 mx-auto flex flex-wrap">
 
         <div class="editor-container ">
-          <div id="editor">; Assembly x86 Code</div>
+          <div id="editor">; Num1 is ax, Num2 is bx 
+mov AX, 42 
+mov BX, 3 
+mov DI, 65520 
+mov [DI], AX 
+; loop to find product 
+mov CX, 1 
+multiply: 
+cmp CX, BX 
+je endmultiply 
+add AX, [DI] 
+inc CX 
+jmp multiply 
+endmultiply: 
+; result = Num1 x Num2 
+xchg [DI], AX 
+; end of program</div>
           <button id="run-button"
             class=" text-gray-900 bg-white border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
             Compile
